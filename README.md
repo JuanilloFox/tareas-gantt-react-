@@ -18,27 +18,27 @@ npm install tareas-gantt-react
 import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'tareas-gantt-react';
 import "tareas-gantt-react/dist/index.css";
 
-let tasks: Task[] = [
+let tareas: Task[] = [
     {
-      start: new Date(2020, 1, 1),
-      end: new Date(2020, 1, 2),
-      name: 'Idea',
-      id: 'Task 0',
-      type:'task',
-      progress: 45,
+      inicio: new Date(2020, 1, 1),
+      fin: new Date(2020, 1, 2),
+      nombre: 'Idea',
+      id: 'Tarea 0',
+      tipo:'tarea',
+      progreso: 45,
       isDisabled: true,
       styles: { progressColor: '#ffbb54', progressSelectedColor: '#ff9e0d' },
     },
     ...
 ];
-<Gantt tasks={tasks} />
+<Gantt tareas={tareas} />
 ```
 
 Puedes manejar acciones
 
 ```javascript
 <Gantt
-  tasks={tasks}
+  tareas={tareas}
   viewMode={view}
   onDateChange={onTaskChange}
   onTaskDelete={onTaskDelete}
@@ -62,7 +62,7 @@ npm start
 
 | Nombre del parámetro            | Tipo          | Descripción                                        |
 | :------------------------------ | :------------ | :------------------------------------------------- |
-| tasks\*                         | [Task](#Task) | Matriz de tareas.                                  |
+| tareas\*                        | [Task](#Task) | Matriz de tareas.                                  |
 | [EventOption](#EventOption)     | interface     | Especifica los eventos de Gantt.                   |
 | [DisplayOption](#DisplayOption) | interface     | Especifica el tipo de vista y el idioma de la      |
 |                                 |               | línea de tiempo que se muestra.                    |
@@ -73,21 +73,21 @@ npm start
 
 | Nombre del parámetro | Tipo                           | Descripción                                                |
 | :------------------- | :----------------------------- | :--------------------------------------------------------- |
-| onSelect             | (task: Task, isSelected:       | Especifica la función que se ejecutará al seleccionar o    |
+| onSelect             | (tarea: Task, isSelected:      | Especifica la función que se ejecutará al seleccionar o    |
 |                      | boolean) => void               | deseleccionar un elemento de la barra de tareas.           |
-| onDoubleClick        | (task: Task) => void           | Especifica la función que se ejecutará en el evento        |
+| onDoubleClick        | (tarea: Task) => void          | Especifica la función que se ejecutará en el evento        |
 |                      |                                | onDoubleClick de la barra de tareas.                       |
-| onClick              | (task: Task) => void           | Especifica la función que se ejecutará en el evento        |
+| onClick              | (tarea: Task) => void          | Especifica la función que se ejecutará en el evento        |
 |                      |                                | onClick de la barra de tareas.                             |
-| onDelete\*           | (task: Task) => void/boolean/  | Especifica la función que se ejecutará en la barra de      |
+| onDelete\*           | (tarea: Task) => void/boolean/ | Especifica la función que se ejecutará en la barra de      |
 |                      | Promise<void>/Promise<boolean> | tareas al pulsar el botón Eliminar.                        |
-| onDateChange\*       | (task: Task, children: Task[]) | Especifica la función que se ejecutará cuando finalice el  |
+| onDateChange\*       | (tarea: Task, children: Task[])| Especifica la función que se ejecutará cuando finalice el  |
 |                      | => void/boolean/Promise<void>/ | evento de arrastrar la barra de tareas en la línea de      |
 |                      | Promise<boolean>               | tiempo.                                                    |
-| onProgressChange\*   | (task: Task, children: Task[]) | Especifica la función que se ejecutará cuando finalice el  |
+| onProgressChange\*   | (tarea: Task, children: Task[])| Especifica la función que se ejecutará cuando finalice el  |
 |                      | => void/boolean/Promise<void>/ | evento de progreso de arrastre de la barra de tareas.      |
 |                      | Promise<boolean>               |                                                            |
-| onExpanderClick\*    | onExpanderClick: (task: Task)  | Especifica la función que se ejecutará al hacer clic       |
+| onExpanderClick\*    | onExpanderClick: (tarea: Task) | Especifica la función que se ejecutará al hacer clic       |
 |                      | => void;                       | en el expansor de tabla.                                   |
 | timeStep             | number                         | Valor del intervalo de tiempo para onDateChange.           |
 |                      |                                | Especifique en milisegundos.                               |
@@ -120,23 +120,30 @@ npm start
 | barCornerRadius            | number | Especifica el redondeo de las esquinas de la barra de tareas.               |
 | barFill                    | number | Especifica la ocupación de la barra de tareas. Se establece en porcentaje   |
 |                            |        | de 0 a 100.                                                                 |
-| handleWidth                | number | Specifies width the taskbar drag event control for start and end dates.                        |
-| fontFamily                 | string | Specifies the application font.                                                                |
-| fontSize                   | string | Specifies the application font size.                                                           |
-| barProgressColor           | string | Specifies the taskbar progress fill color globally.                                            |
-| barProgressSelectedColor   | string | Specifies the taskbar progress fill color globally on select.                                  |
-| barBackgroundColor         | string | Specifies the taskbar background fill color globally.                                          |
-| barBackgroundSelectedColor | string | Specifies the taskbar background fill color globally on select.                                |
-| arrowColor                 | string | Specifies the relationship arrow fill color.                                                   |
-| arrowIndent                | number | Specifies the relationship arrow right indent. Sets in px                                      |
-| todayColor                 | string | Specifies the current period column fill color.                                                |
-| TooltipContent             |        | Specifies the Tooltip view for selected taskbar.                                               |
-| TaskListHeader             |        | Specifies the task list Header view                                                            |
-| TaskListTable              |        | Specifies the task list Table view                                                             |
+| handleWidth                | number | Especifica el ancho del control de eventos de arrastre de la barra de       |
+|                            |        | tareas para las fechas de inicio y fin.                                     |
+| fontFamily                 | string | Especifica la fuente de la aplicación.                                      |
+| fontSize                   | string | Especifica el tamaño de fuente de la aplicación.                            |
+| barProgressColor           | string | Especifica globalmente el color de relleno de la barra de progreso de la    |
+|                            |        | barra de tareas.                                                            |
+| barProgressSelectedColor   | string | Especifica globalmente el color de relleno de la barra de progreso al       |
+|                            |        | seleccionarla.                                                              |
+| barBackgroundColor         | string | Especifica el color de relleno de fondo de la barra de tareas de forma      |
+|                            |        | global.                                                                     |
+| barBackgroundSelectedColor | string | Especifica el color de relleno de fondo de la barra de tareas de forma      |
+|                            |        | global al seleccionarla.                                                    |
+| arrowColor                 | string | Especifica el color de relleno de la flecha de relación.                    |
+| arrowIndent                | number | Especifica la sangría derecha de la flecha de relación. Se establece en     |
+|                            |        | píxeles.                                                                    |
+| todayColor                 | string | Especifica el color de relleno de la columna del período actual.            |
+| TooltipContent             |        | Especifica la vista de información sobre herramientas para la barra de      |
+|                            |        | tareas seleccionada.                                                        |
+| TaskListHeader             |        | Especifica la vista de encabezado de la lista de tareas                     |
+| TaskListTable              |        | Especifica la vista de tabla de la lista de tareas                          |
 
 - TooltipContent: [`React.FC<{ task: Task; fontSize: string; fontFamily: string; }>;`](https://github.com/JuanilloFox/tareas-gantt-react/blob/main/src/components/other/tooltip.tsx#L56)
 - TaskListHeader: `React.FC<{ headerHeight: number; rowWidth: string; fontFamily: string; fontSize: string;}>;`
-- TaskListTable: `React.FC<{ rowHeight: number; rowWidth: string; fontFamily: string; fontSize: string; locale: string; tasks: Task[]; selectedTaskId: string; setSelectedTask: (taskId: string) => void; }>;`
+- TaskListTable: `React.FC<{ rowHeight: number; rowWidth: string; fontFamily: string; fontSize: string; locale: string; tasks: Task[]; tareaSeleccionadaId: string; setTareaSeleccionada: (treaId: string) => void; }>;`
 
 ### Task
 
@@ -144,12 +151,12 @@ npm start
 | parámetro      | Tipo     | Descripción                                                                            |
 | :------------- | :------- | :------------------------------------------------------------------------------------- |
 | id\*           | string   | ID de tarea.                                                                           |
-| name\*         | string   | Nombre visual de la tarea.                                                             |
-| type\*         | string   | Tipo de visualización de tareas: **task**, **milestone**, **project**                  |
-| start\*        | Date     | Fecha de inicio de la tarea.                                                           |
-| end\*          | Date     | Fin de la tarea date.                                                                  |
-| progress\*     | number   | Progreso de la tarea. Se muestra en porcentaje de 0 a 100.                             |
-| dependencies   | string[] | Especifica los identificadores de las dependencias principales.                        |
+| nombre\*       | string   | Nombre visual de la tarea.                                                             |
+| tipo\*         | string   | Tipo de visualización de tareas: **tarea**, **milestone**, **proyecto**                |
+| inicio\*       | Date     | Fecha de inicio de la tarea.                                                           |
+| fin\*          | Date     | Fin de la tarea date.                                                                  |
+| progreso\*     | number   | Progreso de la tarea. Se muestra en porcentaje de 0 a 100.                             |
+| dependencias   | string[] | Especifica los identificadores de las dependencias principales.                        |
 | styles         | object   | Especifica localmente la configuración de estilo de la barra de tareas. El objeto      |
 |                |          | se pasa con los siguientes atributos:                                                  |
 |                |          | - **backgroundColor**: Cadena. Especifica localmente el color de relleno del fondo de  |
@@ -162,7 +169,7 @@ npm start
 |                |          |   progreso de forma global al seleccionarla.                                           |
 | isDisabled     | bool     | Deshabilita todas las acciones para la tarea actual.                                   |
 | fontSize       | string   | Especifica el tamaño de fuente de la barra de tareas localmente.                       |
-| project        | string   |Nombre del proyecto de tarea                                                            |
+| proyecto       | string   |Nombre del proyecto de tarea                                                            |
 | hideChildren   | bool     | Ocultar elementos secundarios. El parámetro funciona solo con el tipo de proyecto.     |
 
 \*Requerido

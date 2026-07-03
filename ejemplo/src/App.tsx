@@ -1,5 +1,5 @@
 import React from "react";
-import { Task, ViewMode, Gantt } from "tareas-gantt-react";
+import { Tarea, ViewMode, Gantt } from "tareas-gantt-react";
 import { ViewSwitcher } from "./components/view-switcher";
 import { getStartEndDateForProject, initTasks } from "./Auxiliar";
 //import "tareas-gantt-react/dist/index.css";
@@ -8,7 +8,7 @@ import "tareas-gantt-react/dist/index.css";
 // Init
 const App = () => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
-  const [tasks, setTasks] = React.useState<Task[]>(initTasks());
+  const [tareas, setTasks] = React.useState<Tarea[]>(initTasks());
   const [isChecked, setIsChecked] = React.useState(true);
   let columnWidth = 65;
   if (view === ViewMode.Year) {
@@ -19,53 +19,53 @@ const App = () => {
     columnWidth = 250;
   }
 
-  const handleTaskChange = (task: Task) => {
-    console.log("En cambio de fecha Id:" + task.id);
-    let newTasks = tasks.map(t => (t.id === task.id ? task : t));
-    if (task.project) {
-      const [start, end] = getStartEndDateForProject(newTasks, task.project);
-      const project = newTasks[newTasks.findIndex(t => t.id === task.project)];
+  const handleTaskChange = (tarea: Tarea) => {
+    console.log("En cambio de fecha Id:" + tarea.id);
+    let nuevasTareas = tareas.map(t => (t.id === tarea.id ? tarea : t));
+    if (tarea.proyecto) {
+      const [inicio, fin] = getStartEndDateForProject(nuevasTareas, tarea.proyecto);
+      const proyecto = nuevasTareas[nuevasTareas.findIndex(t => t.id === tarea.proyecto)];
       if (
-        project.start.getTime() !== start.getTime() ||
-        project.end.getTime() !== end.getTime()
+        proyecto.inicio.getTime() !== inicio.getTime() ||
+        proyecto.fin.getTime() !== fin.getTime()
       ) {
-        const changedProject = { ...project, start, end };
-        newTasks = newTasks.map(t =>
-          t.id === task.project ? changedProject : t
+        const changedProject = { ...proyecto, inicio, fin };
+        nuevasTareas = nuevasTareas.map(t =>
+          t.id === tarea.proyecto ? changedProject : t
         );
       }
     }
-    setTasks(newTasks);
+    setTasks(nuevasTareas);
   };
 
-  const handleTaskDelete = (task: Task) => {
-    const conf = window.confirm("Estas seguro de " + task.name + " ?");
+  const handleTaskDelete = (tarea: Tarea) => {
+    const conf = window.confirm("Estas seguro de " + tarea.nombre + " ?");
     if (conf) {
-      setTasks(tasks.filter(t => t.id !== task.id));
+      setTasks(tareas.filter(t => t.id !== tarea.id));
     }
     return conf;
   };
 
-  const handleProgressChange = async (task: Task) => {
-    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("En progreso, cambio de ID:" + task.id);
+  const handleProgressChange = async (tarea: Tarea) => {
+    setTasks(tareas.map(t => (t.id === tarea.id ? tarea : t)));
+    console.log("En progreso, cambio de ID:" + tarea.id);
   };
 
-  const handleDblClick = (task: Task) => {
-    alert("Id del evento de doble clic:" + task.id);
+  const handleDblClick = (tarea: Tarea) => {
+    alert("Id del evento de doble clic:" + tarea.id);
   };
 
-  const handleClick = (task: Task) => {
-    console.log("ID del evento On Click:" + task.id);
+  const handleClick = (tarea: Tarea) => {
+    console.log("ID del evento On Click:" + tarea.id);
   };
 
-  const handleSelect = (task: Task, isSelected: boolean) => {
-    console.log(task.name + " tiene " + (isSelected ? "seleccionado" : "deseleccionado"));
+  const handleSelect = (tarea: Tarea, isSelected: boolean) => {
+    console.log(tarea.nombre + " tiene " + (isSelected ? "seleccionado" : "deseleccionado"));
   };
 
-  const handleExpanderClick = (task: Task) => {
-    setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("On expander click Id:" + task.id);
+  const handleExpanderClick = (tarea: Tarea) => {
+    setTasks(tareas.map(t => (t.id === tarea.id ? tarea : t)));
+    console.log("Id al hacer clic en elexpansor:" + tarea.id);
   };
 
   return (
@@ -77,7 +77,7 @@ const App = () => {
       />
       <h3>Gantt With Unlimited Height</h3>
       <Gantt
-        tasks={tasks}
+        tareas={tareas}
         viewMode={view}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}
@@ -91,7 +91,7 @@ const App = () => {
       />
       <h3>Gantt With Limited Height</h3>
       <Gantt
-        tasks={tasks}
+        tareas={tareas}
         viewMode={view}
         onDateChange={handleTaskChange}
         onDelete={handleTaskDelete}

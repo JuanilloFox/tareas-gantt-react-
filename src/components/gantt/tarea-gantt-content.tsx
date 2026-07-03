@@ -1,39 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { EventOption } from "../../types/public-types";
-import { BarTask } from "../../types/bar-tareas";
+import { BarraTareas } from "../../types/barra-tareas";
 import { Arrow } from "../other/arrow";
 import { handleTaskBySVGMouseEvent } from "../../Auxiliares/auxiliar-bar";
 import { isKeyboardEvent } from "../../Auxiliares/otros-auxiliares";
-import { TaskItem } from "../tarea-item/tarea-item";
+import { TareaItem } from "../tarea-item/tarea-item";
 import {
   BarMoveAction,
   GanttContentMoveAction,
   GanttEvent,
 } from "../../types/tareas-gantt-actions";
 
-export type TaskGanttContentProps = {
-  tasks: BarTask[];
+export type TareaGanttContentProps = {
+  tareas: BarraTareas[];
   dates: Date[];
   ganttEvent: GanttEvent;
-  selectedTask: BarTask | undefined;
+  selectedTask: BarraTareas | undefined;
   rowHeight: number;
   columnWidth: number;
   timeStep: number;
   svg?: React.RefObject<SVGSVGElement>;
   svgWidth: number;
-  taskHeight: number;
+  altoTarea: number;
   arrowColor: string;
   arrowIndent: number;
   fontSize: string;
   fontFamily: string;
   rtl: boolean;
   setGanttEvent: (value: GanttEvent) => void;
-  setFailedTask: (value: BarTask | null) => void;
-  setSelectedTask: (taskId: string) => void;
+  setTareaFallida: (value: BarraTareas | null) => void;
+  setTareaSeleccionada: (tareaId: string) => void;
 } & EventOption;
 
-export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
-  tasks,
+export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
+  tareas,
   dates,
   ganttEvent,
   selectedTask,
@@ -41,15 +41,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   columnWidth,
   timeStep,
   svg,
-  taskHeight,
+  altoTarea,
   arrowColor,
   arrowIndent,
   fontFamily,
   fontSize,
   rtl,
   setGanttEvent,
-  setFailedTask,
-  setSelectedTask,
+  setTareaFallida,
+  setTareaSeleccionada,
   onDateChange,
   onProgressChange,
   onDoubleClick,
@@ -74,7 +74,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
-      if (!ganttEvent.changedTask || !point || !svg?.current) return;
+      if (!ganttEvent.tareaCambiada || !point || !svg?.current) return;
       event.preventDefault();
 
       point.x = event.clientX;
@@ -82,23 +82,23 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         svg?.current.getScreenCTM()?.inverse()
       );
 
-      const { isChanged, changedTask } = handleTaskBySVGMouseEvent(
+      const { isChanged, tareaCambiada } = handleTaskBySVGMouseEvent(
         cursor.x,
         ganttEvent.action as BarMoveAction,
-        ganttEvent.changedTask,
+        ganttEvent.tareaCambiada,
         xStep,
         timeStep,
         initEventX1Delta,
         rtl
       );
       if (isChanged) {
-        setGanttEvent({ action: ganttEvent.action, changedTask });
+        setGanttEvent({ action: ganttEvent.action, tareaCambiada });
       }
     };
 
     const handleMouseUp = async (event: MouseEvent) => {
-      const { action, originalSelectedTask, changedTask } = ganttEvent;
-      if (!changedTask || !point || !svg?.current || !originalSelectedTask)
+      const { action, originalSelectedTask, tareaCambiada } = ganttEvent;
+      if (!tareaCambiada || !point || !svg?.current || !originalSelectedTask)
         return;
       event.preventDefault();
 
@@ -106,10 +106,10 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       const cursor = point.matrixTransform(
         svg?.current.getScreenCTM()?.inverse()
       );
-      const { changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
+      const { tareaCambiada: nuevatareaCambiada } = handleTaskBySVGMouseEvent(
         cursor.x,
         action as BarMoveAction,
-        changedTask,
+        tareaCambiada,
         xStep,
         timeStep,
         initEventX1Delta,
@@ -117,9 +117,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       );
 
       const isNotLikeOriginal =
-        originalSelectedTask.start !== newChangedTask.start ||
-        originalSelectedTask.end !== newChangedTask.end ||
-        originalSelectedTask.progress !== newChangedTask.progress;
+        originalSelectedTask.inicio !== nuevatareaCambiada.inicio ||
+        originalSelectedTask.fin !== nuevatareaCambiada.fin ||
+        originalSelectedTask.progreso !== nuevatareaCambiada.progreso;
 
       // remove listeners
       svg.current.removeEventListener("mousemove", handleMouseMove);
@@ -130,14 +130,14 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       // custom operation start
       let operationSuccess = true;
       if (
-        (action === "move" || action === "end" || action === "start") &&
+        (action === "mover" || action === "fin" || action === "inicio") &&
         onDateChange &&
         isNotLikeOriginal
       ) {
         try {
           const result = await onDateChange(
-            newChangedTask,
-            newChangedTask.barChildren
+            nuevatareaCambiada,
+            nuevatareaCambiada.barChildren
           );
           if (result !== undefined) {
             operationSuccess = result;
@@ -148,8 +148,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       } else if (onProgressChange && isNotLikeOriginal) {
         try {
           const result = await onProgressChange(
-            newChangedTask,
-            newChangedTask.barChildren
+            nuevatareaCambiada,
+            nuevatareaCambiada.barChildren
           );
           if (result !== undefined) {
             operationSuccess = result;
@@ -161,16 +161,16 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
       // If operation is failed - return old state
       if (!operationSuccess) {
-        setFailedTask(originalSelectedTask);
+        setTareaFallida(originalSelectedTask);
       }
     };
 
     if (
       !isMoving &&
-      (ganttEvent.action === "move" ||
-        ganttEvent.action === "end" ||
-        ganttEvent.action === "start" ||
-        ganttEvent.action === "progress") &&
+      (ganttEvent.action === "mover" ||
+        ganttEvent.action === "fin" ||
+        ganttEvent.action === "inicio" ||
+        ganttEvent.action === "progreso") &&
       svg?.current
     ) {
       svg.current.addEventListener("mousemove", handleMouseMove);
@@ -188,21 +188,21 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     isMoving,
     point,
     rtl,
-    setFailedTask,
+    setTareaFallida,
     setGanttEvent,
   ]);
 
   /**
-   * Method is Start point of task change
+   * El método es el punto de inicio del cambio de tarea.
    */
   const handleBarEventStart = async (
     action: GanttContentMoveAction,
-    task: BarTask,
+    tarea: BarraTareas,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => {
     if (!event) {
       if (action === "select") {
-        setSelectedTask(task.id);
+        setTareaSeleccionada(tarea.id);
       }
     }
     // Keyboard events
@@ -210,9 +210,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       if (action === "delete") {
         if (onDelete) {
           try {
-            const result = await onDelete(task);
+            const result = await onDelete(tarea);
             if (result !== undefined && result) {
-              setGanttEvent({ action, changedTask: task });
+              setGanttEvent({ action, tareaCambiada: tarea });
             }
           } catch (error) {
             console.error("Error on Delete. " + error);
@@ -225,8 +225,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       if (!ganttEvent.action) {
         setGanttEvent({
           action,
-          changedTask: task,
-          originalSelectedTask: task,
+          tareaCambiada: tarea,
+          originalSelectedTask: tarea,
         });
       }
     } else if (action === "mouseleave") {
@@ -234,28 +234,28 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         setGanttEvent({ action: "" });
       }
     } else if (action === "dblclick") {
-      !!onDoubleClick && onDoubleClick(task);
+      !!onDoubleClick && onDoubleClick(tarea);
     } else if (action === "click") {
-      !!onClick && onClick(task);
+      !!onClick && onClick(tarea);
     }
-    // Change task event start
-    else if (action === "move") {
+    // Cambio de tarea en evento inicio
+    else if (action === "mover") {
       if (!svg?.current || !point) return;
       point.x = event.clientX;
       const cursor = point.matrixTransform(
         svg.current.getScreenCTM()?.inverse()
       );
-      setInitEventX1Delta(cursor.x - task.x1);
+      setInitEventX1Delta(cursor.x - tarea.x1);
       setGanttEvent({
         action,
-        changedTask: task,
-        originalSelectedTask: task,
+        tareaCambiada: tarea,
+        originalSelectedTask: tarea,
       });
     } else {
       setGanttEvent({
         action,
-        changedTask: task,
-        originalSelectedTask: task,
+        tareaCambiada: tarea,
+        originalSelectedTask: tarea,
       });
     }
   };
@@ -263,15 +263,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   return (
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
-        {tasks.map(task => {
-          return task.barChildren.map(child => {
+        {tareas.map(tarea => {
+          return tarea.barChildren.map(child => {
             return (
               <Arrow
-                key={`Arrow from ${task.id} to ${tasks[child.index].id}`}
-                taskFrom={task}
-                taskTo={tasks[child.index]}
+                key={`Arrow from ${tarea.id} to ${tareas[child.index].id}`}
+                taskFrom={tarea}
+                taskTo={tareas[child.index]}
                 rowHeight={rowHeight}
-                taskHeight={taskHeight}
+                altoTarea={altoTarea}
                 arrowIndent={arrowIndent}
                 rtl={rtl}
               />
@@ -280,18 +280,18 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         })}
       </g>
       <g className="bar" fontFamily={fontFamily} fontSize={fontSize}>
-        {tasks.map(task => {
+        {tareas.map(tarea => {
           return (
-            <TaskItem
-              task={task}
+            <TareaItem
+              tarea={tarea}
               arrowIndent={arrowIndent}
-              taskHeight={taskHeight}
-              isProgressChangeable={!!onProgressChange && !task.isDisabled}
-              isDateChangeable={!!onDateChange && !task.isDisabled}
-              isDelete={!task.isDisabled}
+              altoTarea={altoTarea}
+              isProgressChangeable={!!onProgressChange && !tarea.isDisabled}
+              isDateChangeable={!!onDateChange && !tarea.isDisabled}
+              isDelete={!tarea.isDisabled}
               onEventStart={handleBarEventStart}
-              key={task.id}
-              isSelected={!!selectedTask && task.id === selectedTask.id}
+              key={tarea.id}
+              isSelected={!!selectedTask && tarea.id === selectedTask.id}
               rtl={rtl}
             />
           );

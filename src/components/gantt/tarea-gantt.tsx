@@ -1,18 +1,18 @@
 import React, { useRef, useEffect } from "react";
 import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
-import { TaskGanttContentProps, TaskGanttContent } from "./tareas-gantt-content";
+import { TareaGanttContentProps, TareaGanttContent } from "./tarea-gantt-content";
 import styles from "./gantt.module.css";
 
-export type TaskGanttProps = {
+export type TareaGanttProps = {
   gridProps: GridProps;
   calendarProps: CalendarProps;
-  barProps: TaskGanttContentProps;
+  barProps: TareaGanttContentProps;
   ganttHeight: number;
   scrollY: number;
   scrollX: number;
 };
-export const TaskGantt: React.FC<TaskGanttProps> = ({
+export const TareaGantt: React.FC<TareaGanttProps> = ({
   gridProps,
   calendarProps,
   barProps,
@@ -63,12 +63,12 @@ export const TaskGantt: React.FC<TaskGanttProps> = ({
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
-          height={barProps.rowHeight * barProps.tasks.length}
+          height={barProps.rowHeight * barProps.tareas.length}
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
         >
           <Grid {...gridProps} />
-          <TaskGanttContent {...newBarProps} />
+          <TareaGanttContent {...newBarProps} />
         </svg>
       </div>
     </div>

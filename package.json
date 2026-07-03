@@ -21,7 +21,7 @@
     "gantt-chart",
     "gantt chart",
     "react-gantt",
-    "task"
+    "tarea"
   ],
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
@@ -32,7 +32,7 @@
     "test:lint": "eslint --ext .tsx src/**/*",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "predeploy": "cd example && npm install && npm run build",
+    "predeploy": "cd ejemplo && npm install && npm run build",
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {

@@ -1,4 +1,4 @@
-import { Task, ViewMode } from "../types/public-types";
+import { Tarea, ViewMode } from "../types/public-types";
 
 type DateHelperScales =
   | "year"
@@ -70,21 +70,21 @@ export const startOfDate = (date: Date, scale: DateHelperScales): Date => {
 };
 
 export const ganttDateRange = (
-  tasks: Task[],
+  tareas: Tarea[],
   viewMode: ViewMode,
   preStepsCount: number
 ): [Date, Date] => {
-  if (!tasks.length) return [new Date(), new Date()];
+  if (!tareas.length) return [new Date(), new Date()];
 
-  let newStartDate: Date = new Date(tasks[0].start.getTime());
-  let newEndDate: Date = new Date(tasks[0].end.getTime());
+  let newStartDate: Date = new Date(tareas[0].inicio.getTime());
+  let newEndDate: Date = new Date(tareas[0].fin.getTime());
 
-  for (const task of tasks) {
-    if (task.start < newStartDate) {
-      newStartDate = new Date(task.start.getTime());
+  for (const tarea of tareas) {
+    if (tarea.inicio < newStartDate) {
+      newStartDate = new Date(tarea.inicio.getTime());
     }
-    if (task.end > newEndDate) {
-      newEndDate = new Date(task.end.getTime());
+    if (tarea.fin > newEndDate) {
+      newEndDate = new Date(tarea.fin.getTime());
     }
   }
 

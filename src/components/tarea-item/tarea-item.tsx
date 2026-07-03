@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { BarTask } from "../../types/bar-tareas";
+import { BarraTareas } from "../../types/barra-tareas";
 import { GanttContentMoveAction } from "../../types/tareas-gantt-actions";
 import { Bar } from "./bar/bar";
 import { BarSmall } from "./bar/bar-small";
-import { Milestone } from "./milestone/milestone";
-import { Project } from "./project/project";
+import { Milestone } from "./hito/hito";
+import { Proyecto } from "./proyecto/proyecto";
 import style from "./lista-tareas.module.css";
 
-export type TaskItemProps = {
-  task: BarTask;
+export type TareaItemProps = {
+  tarea: BarraTareas;
   arrowIndent: number;
-  taskHeight: number;
+  altoTarea: number;
   isProgressChangeable: boolean;
   isDateChangeable: boolean;
   isDelete: boolean;
@@ -18,17 +18,17 @@ export type TaskItemProps = {
   rtl: boolean;
   onEventStart: (
     action: GanttContentMoveAction,
-    selectedTask: BarTask,
+    selectedTask: BarraTareas,
     event?: React.MouseEvent | React.KeyboardEvent
   ) => any;
 };
 
-export const TaskItem: React.FC<TaskItemProps> = props => {
+export const TareaItem: React.FC<TareaItemProps> = props => {
   const {
-    task,
+    tarea,
     arrowIndent,
     isDelete,
-    taskHeight,
+    altoTarea,
     isSelected,
     rtl,
     onEventStart,
@@ -36,47 +36,47 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
     ...props,
   };
   const textRef = useRef<SVGTextElement>(null);
-  const [taskItem, setTaskItem] = useState<JSX.Element>(<div />);
+  const [tareaItem, setItemTarea] = useState<JSX.Element>(<div />);
   const [isTextInside, setIsTextInside] = useState(true);
 
   useEffect(() => {
-    switch (task.typeInternal) {
+    switch (tarea.typeInternal) {
       case "milestone":
-        setTaskItem(<Milestone {...props} />);
+        setItemTarea(<Milestone {...props} />);
         break;
-      case "project":
-        setTaskItem(<Project {...props} />);
+      case "proyecto":
+        setItemTarea(<Proyecto {...props} />);
         break;
       case "smalltask":
-        setTaskItem(<BarSmall {...props} />);
+        setItemTarea(<BarSmall {...props} />);
         break;
       default:
-        setTaskItem(<Bar {...props} />);
+        setItemTarea(<Bar {...props} />);
         break;
     }
-  }, [task, isSelected]);
+  }, [tarea, isSelected]);
 
   useEffect(() => {
     if (textRef.current) {
-      setIsTextInside(textRef.current.getBBox().width < task.x2 - task.x1);
+      setIsTextInside(textRef.current.getBBox().width < tarea.x2 - tarea.x1);
     }
-  }, [textRef, task]);
+  }, [textRef, tarea]);
 
   const getX = () => {
-    const width = task.x2 - task.x1;
-    const hasChild = task.barChildren.length > 0;
+    const width = tarea.x2 - tarea.x1;
+    const hasChild = tarea.barChildren.length > 0;
     if (isTextInside) {
-      return task.x1 + width * 0.5;
+      return tarea.x1 + width * 0.5;
     }
     if (rtl && textRef.current) {
       return (
-        task.x1 -
+        tarea.x1 -
         textRef.current.getBBox().width -
         arrowIndent * +hasChild -
         arrowIndent * 0.2
       );
     } else {
-      return task.x1 + width + arrowIndent * +hasChild + arrowIndent * 0.2;
+      return tarea.x1 + width + arrowIndent * +hasChild + arrowIndent * 0.2;
     }
   };
 
@@ -85,32 +85,32 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
       onKeyDown={e => {
         switch (e.key) {
           case "Delete": {
-            if (isDelete) onEventStart("delete", task, e);
+            if (isDelete) onEventStart("delete", tarea, e);
             break;
           }
         }
         e.stopPropagation();
       }}
       onMouseEnter={e => {
-        onEventStart("mouseenter", task, e);
+        onEventStart("mouseenter", tarea, e);
       }}
       onMouseLeave={e => {
-        onEventStart("mouseleave", task, e);
+        onEventStart("mouseleave", tarea, e);
       }}
       onDoubleClick={e => {
-        onEventStart("dblclick", task, e);
+        onEventStart("dblclick", tarea, e);
       }}
       onClick={e => {
-        onEventStart("click", task, e);
+        onEventStart("click", tarea, e);
       }}
       onFocus={() => {
-        onEventStart("select", task);
+        onEventStart("select", tarea);
       }}
     >
-      {taskItem}
+      {tareaItem}
       <text
         x={getX()}
-        y={task.y + taskHeight * 0.5}
+        y={tarea.y + altoTarea * 0.5}
         className={
           isTextInside
             ? style.barLabel
@@ -118,7 +118,7 @@ export const TaskItem: React.FC<TaskItemProps> = props => {
         }
         ref={textRef}
       >
-        {task.name}
+        {tarea.nombre}
       </text>
     </g>
   );

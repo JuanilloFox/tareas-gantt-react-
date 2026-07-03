@@ -1,8 +1,8 @@
-import { Task, TaskType } from "./public-types";
+import { Tarea, TipoTarea } from "./public-types";
 
-export interface BarTask extends Task {
+export interface BarraTareas extends Tarea {
   index: number;
-  typeInternal: TaskTypeInternal;
+  typeInternal: TareaTipoInterna;
   x1: number;
   x2: number;
   y: number;
@@ -11,7 +11,7 @@ export interface BarTask extends Task {
   progressWidth: number;
   barCornerRadius: number;
   handleWidth: number;
-  barChildren: BarTask[];
+  barChildren: BarraTareas[];
   styles: {
     backgroundColor: string;
     backgroundSelectedColor: string;
@@ -20,4 +20,4 @@ export interface BarTask extends Task {
   };
 }
 
-export type TaskTypeInternal = TaskType | "smalltask";
+export type TareaTipoInterna = TipoTarea | "smalltask";

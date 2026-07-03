@@ -1,10 +1,10 @@
 import React, { ReactChild } from "react";
-import { Task } from "../../types/public-types";
+import { Tarea } from "../../types/public-types";
 import { addToDate } from "../../Auxiliares/auxiliar-fecha";
 import styles from "./grid.module.css";
 
 export type GridBodyProps = {
-  tasks: Task[];
+  tareas: Tarea[];
   dates: Date[];
   svgWidth: number;
   rowHeight: number;
@@ -13,7 +13,7 @@ export type GridBodyProps = {
   rtl: boolean;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
-  tasks,
+  tareas,
   dates,
   rowHeight,
   svgWidth,
@@ -33,10 +33,10 @@ export const GridBody: React.FC<GridBodyProps> = ({
       className={styles.gridRowLine}
     />,
   ];
-  for (const task of tasks) {
+  for (const tarea of tareas) {
     gridRows.push(
       <rect
-        key={"Row" + task.id}
+        key={"Row" + tarea.id}
         x="0"
         y={y}
         width={svgWidth}
@@ -46,7 +46,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
     );
     rowLines.push(
       <line
-        key={"RowLine" + task.id}
+        key={"RowLine" + tarea.id}
         x="0"
         y1={y + rowHeight}
         x2={svgWidth}

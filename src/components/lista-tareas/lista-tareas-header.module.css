@@ -22,18 +22,18 @@
   vertical-align: middle;
 }
 
-.taskListTableRow {
+.listaTareasTableRow {
   display: flex;
   align-items: center;
   height: var(--row-height); /* Usa la variable inyectada */
   cursor: pointer;
 }
 
-.taskListTableRow.selectedRow {
+.listaTareasTableRow.selectedRow {
   background-color: #f0f0f0; /* O el color de selección que prefieras */
 }
 
-.taskListCell {
+.listaTareasCell {
   box-sizing: border-box;
   flex: 0 0 var(--row-width); /* Aplica el ancho dinámico de forma eficiente */
   min-width: var(--row-width);

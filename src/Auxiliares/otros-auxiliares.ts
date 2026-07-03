@@ -1,5 +1,5 @@
-import { BarTask } from "../types/bar-tareas";
-import { Task } from "../types/public-types";
+import { BarraTareas } from "../types/barra-tareas";
+import { Tarea } from "../types/public-types";
 
 export function isKeyboardEvent(
   event: React.MouseEvent | React.KeyboardEvent | React.FocusEvent
@@ -13,44 +13,44 @@ export function isMouseEvent(
   return (event as React.MouseEvent).clientX !== undefined;
 }
 
-export function isBarTask(task: Task | BarTask): task is BarTask {
-  return (task as BarTask).x1 !== undefined;
+export function isBarTask(tarea: Tarea | BarraTareas): tarea is BarraTareas {
+  return (tarea as BarraTareas).x1 !== undefined;
 }
 
-export function removeHiddenTasks(tasks: Task[]) {
-  const groupedTasks = tasks.filter(
-    t => t.hideChildren && t.type === "project"
+export function retirarTareasOcultas(tareas: Tarea[]) {
+  const groupedTasks = tareas.filter(
+    t => t.hideChildren && t.tipo === "proyecto"
   );
   if (groupedTasks.length > 0) {
     for (let i = 0; groupedTasks.length > i; i++) {
       const groupedTask = groupedTasks[i];
-      const children = getChildren(tasks, groupedTask);
-      tasks = tasks.filter(t => children.indexOf(t) === -1);
+      const children = getChildren(tareas, groupedTask);
+      tareas = tareas.filter(t => children.indexOf(t) === -1);
     }
   }
-  return tasks;
+  return tareas;
 }
 
-function getChildren(taskList: Task[], task: Task) {
-  let tasks: Task[] = [];
-  if (task.type !== "project") {
-    tasks = taskList.filter(
-      t => t.dependencies && t.dependencies.indexOf(task.id) !== -1
+function getChildren(listaTareas: Tarea[], tarea: Tarea) {
+  let tareas: Tarea[] = [];
+  if (tarea.tipo !== "proyecto") {
+    tareas = listaTareas.filter(
+      t => t.dependencias && t.dependencias.indexOf(tarea.id) !== -1
     );
   } else {
-    tasks = taskList.filter(t => t.project && t.project === task.id);
+    tareas = listaTareas.filter(t => t.proyecto && t.proyecto === tarea.id);
   }
-  var taskChildren: Task[] = [];
-  tasks.forEach(t => {
-    taskChildren.push(...getChildren(taskList, t));
+  var tareaHija: Tarea[] = [];
+  tareas.forEach(t => {
+    tareaHija.push(...getChildren(listaTareas, t));
   })
-  tasks = tasks.concat(tasks, taskChildren);
-  return tasks;
+  tareas = tareas.concat(tareas, tareaHija);
+  return tareas;
 }
 
-export const sortTasks = (taskA: Task, taskB: Task) => {
-  const orderA = taskA.displayOrder || Number.MAX_VALUE;
-  const orderB = taskB.displayOrder || Number.MAX_VALUE;
+export const ordenarTareas = (tareaA: Tarea, tareaB: Tarea) => {
+  const orderA = tareaA.displayOrder || Number.MAX_VALUE;
+  const orderB = tareaB.displayOrder || Number.MAX_VALUE;
   if (orderA > orderB) {
     return 1;
   } else if (orderA < orderB) {

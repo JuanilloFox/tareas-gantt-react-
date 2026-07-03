@@ -1,30 +1,30 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Task } from "../../types/public-types";
-import { BarTask } from "../../types/bar-tareas";
+import { Tarea } from "../../types/public-types";
+import { BarraTareas } from "../../types/barra-tareas";
 import styles from "./tooltip.module.css";
 
 export type TooltipProps = {
-  task: BarTask;
+  tarea: BarraTareas;
   arrowIndent: number;
   rtl: boolean;
   svgContainerHeight: number;
   svgContainerWidth: number;
   svgWidth: number;
   headerHeight: number;
-  taskListWidth: number;
+  listaTareasWidth: number;
   scrollX: number;
   scrollY: number;
   rowHeight: number;
   fontSize: string;
   fontFamily: string;
   TooltipContent: React.FC<{
-    task: Task;
+    tarea: Tarea;
     fontSize: string;
     fontFamily: string;
   }>;
 };
 export const Tooltip: React.FC<TooltipProps> = ({
-  task,
+  tarea,
   rowHeight,
   rtl,
   svgContainerHeight,
@@ -35,7 +35,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   fontSize,
   fontFamily,
   headerHeight,
-  taskListWidth,
+  listaTareasWidth,
   TooltipContent,
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -46,12 +46,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
       const tooltipHeight = tooltipRef.current.offsetHeight * 1.1;
       const tooltipWidth = tooltipRef.current.offsetWidth * 1.1;
 
-      let newRelatedY = task.index * rowHeight - scrollY + headerHeight;
+      let newRelatedY = tarea.index * rowHeight - scrollY + headerHeight;
       let newRelatedX: number;
       if (rtl) {
-        newRelatedX = task.x1 - arrowIndent * 1.5 - tooltipWidth - scrollX;
+        newRelatedX = tarea.x1 - arrowIndent * 1.5 - tooltipWidth - scrollX;
         if (newRelatedX < 0) {
-          newRelatedX = task.x2 + arrowIndent * 1.5 - scrollX;
+          newRelatedX = tarea.x2 + arrowIndent * 1.5 - scrollX;
         }
         const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
         if (tooltipLeftmostPoint > svgContainerWidth) {
@@ -59,19 +59,19 @@ export const Tooltip: React.FC<TooltipProps> = ({
           newRelatedY += rowHeight;
         }
       } else {
-        newRelatedX = task.x2 + arrowIndent * 1.5 + taskListWidth - scrollX;
+        newRelatedX = tarea.x2 + arrowIndent * 1.5 + listaTareasWidth - scrollX;
         const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
-        const fullChartWidth = taskListWidth + svgContainerWidth;
+        const fullChartWidth = listaTareasWidth + svgContainerWidth;
         if (tooltipLeftmostPoint > fullChartWidth) {
           newRelatedX =
-            task.x1 +
-            taskListWidth -
+            tarea.x1 +
+            listaTareasWidth -
             arrowIndent * 1.5 -
             scrollX -
             tooltipWidth;
         }
-        if (newRelatedX < taskListWidth) {
-          newRelatedX = svgContainerWidth + taskListWidth - tooltipWidth;
+        if (newRelatedX < listaTareasWidth) {
+          newRelatedX = svgContainerWidth + listaTareasWidth - tooltipWidth;
           newRelatedY += rowHeight;
         }
       }
@@ -85,12 +85,12 @@ export const Tooltip: React.FC<TooltipProps> = ({
     }
   }, [
     tooltipRef,
-    task,
+    tarea,
     arrowIndent,
     scrollX,
     scrollY,
     headerHeight,
-    taskListWidth,
+    listaTareasWidth,
     rowHeight,
     svgContainerHeight,
     svgContainerWidth,
@@ -107,16 +107,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
       }
       style={{ left: relatedX, top: relatedY }}
     >
-      <TooltipContent task={task} fontSize={fontSize} fontFamily={fontFamily} />
+      <TooltipContent tarea={tarea} fontSize={fontSize} fontFamily={fontFamily} />
     </div>
   );
 };
 
 export const StandardTooltipContent: React.FC<{
-  task: Task;
+  tarea: Tarea;
   fontSize: string;
   fontFamily: string;
-}> = ({ task, fontSize, fontFamily }) => {
+}> = ({ tarea, fontSize, fontFamily }) => {
   const style = {
     fontSize,
     fontFamily,
@@ -124,21 +124,21 @@ export const StandardTooltipContent: React.FC<{
   return (
     <div className={styles.tooltipDefaultContainer} style={style}>
       <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
-        task.start.getMonth() + 1
-      }-${task.start.getFullYear()} - ${task.end.getDate()}-${
-        task.end.getMonth() + 1
-      }-${task.end.getFullYear()}`}</b>
-      {task.end.getTime() - task.start.getTime() !== 0 && (
-        <p className={styles.tooltipDefaultContainerParagraph}>{`Duration: ${~~(
-          (task.end.getTime() - task.start.getTime()) /
+        tarea.nombre
+      }: ${tarea.inicio.getDate()}-${
+        tarea.inicio.getMonth() + 1
+      }-${tarea.inicio.getFullYear()} - ${tarea.fin.getDate()}-${
+        tarea.fin.getMonth() + 1
+      }-${tarea.fin.getFullYear()}`}</b>
+      {tarea.fin.getTime() - tarea.inicio.getTime() !== 0 && (
+        <p className={styles.tooltipDefaultContainerParagraph}>{`Duración: ${~~(
+          (tarea.fin.getTime() - tarea.inicio.getTime()) /
           (1000 * 60 * 60 * 24)
-        )} day(s)`}</p>
+        )} día(s)`}</p>
       )}
 
       <p className={styles.tooltipDefaultContainerParagraph}>
-        {!!task.progress && `Progress: ${task.progress} %`}
+        {!!tarea.progreso && `Progreso: ${tarea.progreso} %`}
       </p>
     </div>
   );

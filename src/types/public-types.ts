@@ -1,25 +1,25 @@
 export enum ViewMode {
-  Hour = "Hour",
-  QuarterDay = "Quarter Day",
-  HalfDay = "Half Day",
-  Day = "Day",
+  Hour = "Hora",
+  QuarterDay = "Cuarto de Día",
+  HalfDay = "Medio Día",
+  Day = "Día",
   /** ISO-8601 week */
-  Week = "Week",
-  Month = "Month",
-  QuarterYear = "QuarterYear",
-  Year = "Year",
+  Week = "Semana",
+  Month = "Mes",
+  QuarterYear = "Cuarto de Año",
+  Year = "Año",
 }
-export type TaskType = "task" | "milestone" | "project";
-export interface Task {
+export type TipoTarea = "tarea" | "milestone" | "proyecto";
+export interface Tarea {
   id: string;
-  type: TaskType;
-  name: string;
-  start: Date;
-  end: Date;
+  tipo: TipoTarea;
+  nombre: string;
+  inicio: Date;
+  fin: Date;
   /**
-   * From 0 to 100
+   * Desde 0 a 100
    */
-  progress: number;
+  progreso: number;
   styles?: {
     backgroundColor?: string;
     backgroundSelectedColor?: string;
@@ -27,51 +27,54 @@ export interface Task {
     progressSelectedColor?: string;
   };
   isDisabled?: boolean;
-  project?: string;
-  dependencies?: string[];
+  proyecto?: string;
+  dependencias?: string[];
   hideChildren?: boolean;
   displayOrder?: number;
 }
 
 export interface EventOption {
   /**
-   * Time step value for date changes.
+   * Valor del intervalo de tiempo para los cambios de fecha.
    */
   timeStep?: number;
   /**
-   * Invokes on bar select on unselect.
+   * Se activa al seleccionar o deseleccionar la barra.
    */
-  onSelect?: (task: Task, isSelected: boolean) => void;
+  onSelect?: (tarea: Tarea, isSelected: boolean) => void;
   /**
-   * Invokes on bar double click.
+   * Se activa al hacer doble clic en la barra.
    */
-  onDoubleClick?: (task: Task) => void;
+  onDoubleClick?: (tarea: Tarea) => void;
   /**
    * Invokes on bar click.
    */
-  onClick?: (task: Task) => void;
+  onClick?: (tarea: Tarea) => void;
   /**
-   * Invokes on end and start time change. Chart undoes operation if method return false or error.
+   * Invoca el cambio de hora de inicio y fin.
+   * El gráfico deshace la operación si el método devuelve falso o error.
    */
   onDateChange?: (
-    task: Task,
-    children: Task[]
+    tarea: Tarea,
+    children: Tarea[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
-   * Invokes on progress change. Chart undoes operation if method return false or error.
+   * Se activa al cambiar el progreso.
+   * El gráfico deshace la operación si el método devuelve falso o un error.
    */
   onProgressChange?: (
-    task: Task,
-    children: Task[]
+    tarea: Tarea,
+    children: Tarea[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
-   * Invokes on delete selected task. Chart undoes operation if method return false or error.
+   * Se activa al eliminar la tarea seleccionada.
+   * El gráfico deshace la operación si el método devuelve falso o un error.
    */
-  onDelete?: (task: Task) => void | boolean | Promise<void> | Promise<boolean>;
+  onDelete?: (tarea: Tarea) => void | boolean | Promise<void> | Promise<boolean>;
   /**
-   * Invokes on expander on task list
+   * Se invoca en el expansor en la lista de tareas
    */
-  onExpanderClick?: (task: Task) => void;
+  onExpanderClick?: (tarea: Tarea) => void;
 }
 
 export interface DisplayOption {
@@ -79,7 +82,7 @@ export interface DisplayOption {
   viewDate?: Date;
   preStepsCount?: number;
   /**
-   * Specifies the month name language. Able formats: ISO 639-2, Java Locale
+   * Especifica el idioma del nombre del mes. Formatos compatibles: ISO 639-2, Java Locale
    */
   locale?: string;
   rtl?: boolean;
@@ -96,8 +99,8 @@ export interface StylingOption {
   fontFamily?: string;
   fontSize?: string;
   /**
-   * How many of row width can be taken by task.
-   * From 0 to 100
+   * ¿Cuántas filas de ancho puede ocupar una tarea?
+   * Desde 0 a 100
    */
   barFill?: number;
   barProgressColor?: string;
@@ -114,32 +117,32 @@ export interface StylingOption {
   arrowIndent?: number;
   todayColor?: string;
   TooltipContent?: React.FC<{
-    task: Task;
+    tarea: Tarea;
     fontSize: string;
     fontFamily: string;
   }>;
-  TaskListHeader?: React.FC<{
+  ListaTareasHeader?: React.FC<{
     headerHeight: number;
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
   }>;
-  TaskListTable?: React.FC<{
+  ListaTareasTable?: React.FC<{
     rowHeight: number;
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
     locale: string;
-    tasks: Task[];
-    selectedTaskId: string;
+    tareas: Tarea[];
+    tareaSeleccionadaId: string;
     /**
-     * Sets selected task by id
+     * Establece la tarea seleccionada por ID
      */
-    setSelectedTask: (taskId: string) => void;
-    onExpanderClick: (task: Task) => void;
+    setTareaSeleccionada: (tareaId: string) => void;
+    onExpanderClick: (tarea: Tarea) => void;
   }>;
 }
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
-  tasks: Task[];
+  tareas: Tarea[];
 }

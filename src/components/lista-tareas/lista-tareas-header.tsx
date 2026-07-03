@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./lista-tareas-header.module.css";
 
-export const TaskListHeaderDefault: React.FC<{
+export const ListaTareasHeaderDefault: React.FC<{
   headerHeight: number;
   rowWidth: string;
   fontFamily: string;

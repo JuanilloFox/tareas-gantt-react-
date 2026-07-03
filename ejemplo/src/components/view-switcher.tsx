@@ -67,7 +67,7 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
           />
           <span className="Slider" />
         </label>
-        Show Task List
+        Mostrar lista de tareas
       </div>
     </div>
   );

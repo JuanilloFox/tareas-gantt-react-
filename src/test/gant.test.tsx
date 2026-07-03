@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Gantt } from "../index";
 
 describe("gantt", () => {
-  it("renders without crashing", () => {
+  it("renderiza sin fallar", () => {
     const div = document.createElement("div");
     const root = createRoot(div);
     root.render(
@@ -12,10 +12,10 @@ describe("gantt", () => {
           {
             start: new Date(2020, 0, 1),
             end: new Date(2020, 2, 2),
-            name: "Redesign website",
-            id: "Task 0",
+            name: "Rediseño del sitio web",
+            id: "Tarea 0",
             progress: 45,
-            type: "task",
+            type: "tarea",
           },
         ]}
       />

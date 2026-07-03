@@ -7,7 +7,7 @@
       "dom.Iterable",
       "esnext"
     ],
-    "moduleResolution": "nodenext",
+    "moduleResolution": "bundler",
     "jsx": "react",
     "sourceMap": true,
     "declaration": true,

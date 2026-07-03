@@ -1,115 +1,115 @@
-import { Task } from "tareas-gantt-react/dist/types/public-types";
+import { Tarea } from "tareas-gantt-react/dist/types/public-types";
 
 export function initTasks() {
   const currentDate = new Date();
-  const tasks: Task[] = [
+  const tareas: Tarea[] = [
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      name: "Algún proyecto",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      nombre: "Algún proyecto",
       id: "ProyectoEjemplo",
-      progress: 25,
-      type: "project",
+      progreso: 25,
+      tipo: "proyecto",
       hideChildren: false,
       displayOrder: 1,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      fin: new Date(
         currentDate.getFullYear(),
         currentDate.getMonth(),
         2,
         12,
         28
       ),
-      name: "Idea",
-      id: "Task 0",
-      progress: 45,
-      type: "task",
-      project: "ProyectoEjemplo",
+      nombre: "Idea",
+      id: "Tarea 0",
+      progreso: 45,
+      tipo: "tarea",
+      proyecto: "ProyectoEjemplo",
       displayOrder: 2,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
-      name: "Investigación",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
+      nombre: "Investigación",
       id: "Tarea 1",
-      progress: 25,
-      dependencies: ["Tarea 0"],
-      type: "task",
-      project: "ProyectoEjemplo",
+      progreso: 25,
+      dependencias: ["Tarea 0"],
+      tipo: "tarea",
+      proyecto: "ProyectoEjemplo",
       displayOrder: 3,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
-      name: "Discusión con el equipo",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8, 0, 0),
+      nombre: "Discusión con el equipo",
       id: "Tarea 2",
-      progress: 10,
-      dependencies: ["Tarea 1"],
-      type: "task",
-      project: "ProyectoEjemplo",
+      progreso: 10,
+      dependencias: ["Tarea 1"],
+      tipo: "tarea",
+      proyecto: "ProyectoEjemplo",
       displayOrder: 4,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9, 0, 0),
-      name: "Developing",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 9, 0, 0),
+      nombre: "Developing",
       id: "Tarea 3",
-      progress: 2,
-      dependencies: ["Tarea 2"],
-      type: "task",
-      project: "ProyectoEjemplo",
+      progreso: 2,
+      dependencias: ["Tarea 2"],
+      tipo: "tarea",
+      proyecto: "ProyectoEjemplo",
       displayOrder: 5,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
-      name: "Revisión",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 8),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 10),
+      nombre: "Revisión",
       id: "Tarea 4",
-      type: "task",
-      progress: 70,
-      dependencies: ["Tarea 2"],
-      project: "ProyectoEjemplo",
+      tipo: "tarea",
+      progreso: 70,
+      dependencias: ["Tarea 2"],
+      proyecto: "ProyectoEjemplo",
       displayOrder: 6,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      name: "Liberar",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      nombre: "Liberar",
       id: "Tarea 6",
-      progress: currentDate.getMonth(),
-      type: "milestone",
-      dependencies: ["Tarea 4"],
-      project: "ProyectoEjemplo",
+      progreso: currentDate.getMonth(),
+      tipo: "milestone",
+      dependencias: ["Tarea 4"],
+      proyecto: "ProyectoEjemplo",
       displayOrder: 7,
     },
     {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
-      name: "Horario festivo",
+      inicio: new Date(currentDate.getFullYear(), currentDate.getMonth(), 18),
+      fin: new Date(currentDate.getFullYear(), currentDate.getMonth(), 19),
+      nombre: "Horario festivo",
       id: "Tarea 9",
-      progress: 0,
+      progreso: 0,
       isDisabled: true,
-      type: "task",
+      tipo: "tarea",
     },
   ];
-  return tasks;
+  return tareas;
 }
 
-export function getStartEndDateForProject(tasks: Task[], projectId: string) {
-  const projectTasks = tasks.filter(t => t.project === projectId);
-  let start = projectTasks[0].start;
-  let end = projectTasks[0].end;
+export function getStartEndDateForProject(tareas: Tarea[], proyectoId: string) {
+  const tareasProyecto = tareas.filter(t => t.proyecto === proyectoId);
+  let inicio = tareasProyecto[0].inicio;
+  let fin = tareasProyecto[0].fin;
 
-  for (let i = 0; i < projectTasks.length; i++) {
-    const task = projectTasks[i];
-    if (start.getTime() > task.start.getTime()) {
-      start = task.start;
+  for (let i = 0; i < tareasProyecto.length; i++) {
+    const tarea = tareasProyecto[i];
+    if (inicio.getTime() > tarea.inicio.getTime()) {
+      inicio = tarea.inicio;
     }
-    if (end.getTime() < task.end.getTime()) {
-      end = task.end;
+    if (fin.getTime() < tarea.fin.getTime()) {
+      fin = tarea.fin;
     }
   }
-  return [start, end];
+  return [inicio, fin];
 }

@@ -1,5 +1,5 @@
-This example was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este ejemplo se inició con [Create React App](https://github.com/facebook/create-react-app).
 
-It is linked to the gantt-task-react package in the parent directory for development purposes.
+Está vinculado al paquete tarea-gantt-react en el directorio principal para fines de desarrollo.
 
-You can run `npm install` and then `npm start` to test your package.
+Puedes ejecutar `npm install` y después `npm start` para probar su paquete.

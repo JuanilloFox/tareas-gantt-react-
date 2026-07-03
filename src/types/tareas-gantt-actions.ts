@@ -1,6 +1,6 @@
-import { BarTask } from "./bar-tareas";
+import { BarraTareas } from "./barra-tareas";
 
-export type BarMoveAction = "progress" | "end" | "start" | "move";
+export type BarMoveAction = "progreso" | "fin" | "inicio" | "mover";
 export type GanttContentMoveAction =
   | "mouseenter"
   | "mouseleave"
@@ -12,7 +12,7 @@ export type GanttContentMoveAction =
   | BarMoveAction;
 
 export type GanttEvent = {
-  changedTask?: BarTask;
-  originalSelectedTask?: BarTask;
+  tareaCambiada?: BarraTareas;
+  originalSelectedTask?: BarraTareas;
   action: GanttContentMoveAction;
 };

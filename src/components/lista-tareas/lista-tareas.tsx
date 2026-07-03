@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import { BarTask } from "../../types/bar-tareas";
-import { Task } from "../../types/public-types";
+import { BarraTareas } from "../../types/barra-tareas";
+import { Tarea } from "../../types/public-types";
 
-export type TaskListProps = {
+export type ListaTareasProps = {
   headerHeight: number;
   rowWidth: string;
   fontFamily: string;
@@ -11,48 +11,48 @@ export type TaskListProps = {
   ganttHeight: number;
   scrollY: number;
   locale: string;
-  tasks: Task[];
-  taskListRef: React.RefObject<HTMLDivElement>;
+  tareas: Tarea[];
+  listaTareasRef: React.RefObject<HTMLDivElement>;
   horizontalContainerClass?: string;
-  selectedTask: BarTask | undefined;
-  setSelectedTask: (task: string) => void;
-  onExpanderClick: (task: Task) => void;
-  TaskListHeader: React.FC<{
+  selectedTask: BarraTareas | undefined;
+  setTareaSeleccionada: (tarea: string) => void;
+  onExpanderClick: (tarea: Tarea) => void;
+  ListaTareasHeader: React.FC<{
     headerHeight: number;
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
   }>;
-  TaskListTable: React.FC<{
+  ListaTareasTable: React.FC<{
     rowHeight: number;
     rowWidth: string;
     fontFamily: string;
     fontSize: string;
     locale: string;
-    tasks: Task[];
-    selectedTaskId: string;
-    setSelectedTask: (taskId: string) => void;
-    onExpanderClick: (task: Task) => void;
+    tareas: Tarea[];
+    tareaSeleccionadaId: string;
+    setTareaSeleccionada: (tareaId: string) => void;
+    onExpanderClick: (tarea: Tarea) => void;
   }>;
 };
 
-export const TaskList: React.FC<TaskListProps> = ({
+export const ListaTareas: React.FC<ListaTareasProps> = ({
   headerHeight,
   fontFamily,
   fontSize,
   rowWidth,
   rowHeight,
   scrollY,
-  tasks,
+  tareas,
   selectedTask,
-  setSelectedTask,
+  setTareaSeleccionada,
   onExpanderClick,
   locale,
   ganttHeight,
-  taskListRef,
+  listaTareasRef,
   horizontalContainerClass,
-  TaskListHeader,
-  TaskListTable,
+  ListaTareasHeader,
+  ListaTareasTable,
 }) => {
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -67,28 +67,28 @@ export const TaskList: React.FC<TaskListProps> = ({
     fontSize,
     rowWidth,
   };
-  const selectedTaskId = selectedTask ? selectedTask.id : "";
+  const tareaSeleccionadaId = selectedTask ? selectedTask.id : "";
   const tableProps = {
     rowHeight,
     rowWidth,
     fontFamily,
     fontSize,
-    tasks,
+    tareas,
     locale,
-    selectedTaskId: selectedTaskId,
-    setSelectedTask,
+    tareaSeleccionadaId: tareaSeleccionadaId,
+    setTareaSeleccionada,
     onExpanderClick,
   };
 
   return (
-    <div ref={taskListRef}>
-      <TaskListHeader {...headerProps} />
+    <div ref={listaTareasRef}>
+      <ListaTareasHeader {...headerProps} />
       <div
         ref={horizontalContainerRef}
         className={horizontalContainerClass}
         style={ganttHeight ? { height: ganttHeight } : {}}
       >
-        <TaskListTable {...tableProps} />
+        <ListaTareasTable {...tableProps} />
       </div>
     </div>
   );
