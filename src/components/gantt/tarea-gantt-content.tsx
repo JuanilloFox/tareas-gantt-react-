@@ -13,10 +13,10 @@ import {
 
 export type TareaGanttContentProps = {
   tareas: BarraTareas[];
-  dates: Date[];
+  fechas: Date[];
   ganttEvent: GanttEvent;
   tareaSeleccionada: BarraTareas | undefined;
-  rowHeight: number;
+  altoFila: number;
   anchoColumna: number;
   timeStep: number;
   svg?: React.RefObject<SVGSVGElement>;
@@ -34,10 +34,10 @@ export type TareaGanttContentProps = {
 
 export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
   tareas,
-  dates,
+  fechas,
   ganttEvent,
   tareaSeleccionada,
-  rowHeight,
+  altoFila,
   anchoColumna,
   timeStep,
   svg,
@@ -64,13 +64,13 @@ export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
   // create xStep
   useEffect(() => {
     const dateDelta =
-      dates[1].getTime() -
-      dates[0].getTime() -
-      dates[1].getTimezoneOffset() * 60 * 1000 +
-      dates[0].getTimezoneOffset() * 60 * 1000;
+      fechas[1].getTime() -
+      fechas[0].getTime() -
+      fechas[1].getTimezoneOffset() * 60 * 1000 +
+      fechas[0].getTimezoneOffset() * 60 * 1000;
     const newXStep = (timeStep * anchoColumna) / dateDelta;
     setXStep(newXStep);
-  }, [anchoColumna, dates, timeStep]);
+  }, [anchoColumna, fechas, timeStep]);
 
   useEffect(() => {
     const handleMouseMove = async (event: MouseEvent) => {
@@ -137,7 +137,7 @@ export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
         try {
           const result = await onDateChange(
             nuevatareaCambiada,
-            nuevatareaCambiada.barChildren
+            nuevatareaCambiada.barraHijos
           );
           if (result !== undefined) {
             operationSuccess = result;
@@ -149,7 +149,7 @@ export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
         try {
           const result = await onProgressChange(
             nuevatareaCambiada,
-            nuevatareaCambiada.barChildren
+            nuevatareaCambiada.barraHijos
           );
           if (result !== undefined) {
             operationSuccess = result;
@@ -264,13 +264,13 @@ export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
     <g className="content">
       <g className="arrows" fill={arrowColor} stroke={arrowColor}>
         {tareas.map(tarea => {
-          return tarea.barChildren.map(child => {
+          return tarea.barraHijos.map(child => {
             return (
               <Arrow
                 key={`Arrow from ${tarea.id} to ${tareas[child.index].id}`}
                 tareaDesde={tarea}
                 tareaHasta={tareas[child.index]}
-                rowHeight={rowHeight}
+                altoFila={altoFila}
                 altoTarea={altoTarea}
                 arrowIndent={arrowIndent}
                 rtl={rtl}
@@ -286,9 +286,9 @@ export const TareaGanttContent: React.FC<TareaGanttContentProps> = ({
               tarea={tarea}
               arrowIndent={arrowIndent}
               altoTarea={altoTarea}
-              isProgressChangeable={!!onProgressChange && !tarea.isDisabled}
-              isDateChangeable={!!onDateChange && !tarea.isDisabled}
-              isDelete={!tarea.isDisabled}
+              isProgressChangeable={!!onProgressChange && !tarea.desactivada}
+              isDateChangeable={!!onDateChange && !tarea.desactivada}
+              isDelete={!tarea.desactivada}
               onEventStart={handleBarEventStart}
               key={tarea.id}
               isSelected={!!tareaSeleccionada && tarea.id === tareaSeleccionada.id}

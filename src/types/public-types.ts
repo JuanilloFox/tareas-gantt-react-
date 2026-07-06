@@ -1,5 +1,5 @@
 export enum ViewMode {
-  Hour = "Hora",
+  Hora = "Hora",
   QuarterDay = "Cuarto de Día",
   HalfDay = "Medio Día",
   Day = "Día",
@@ -26,11 +26,11 @@ export interface Tarea {
     progressColor?: string;
     progressSelectedColor?: string;
   };
-  isDisabled?: boolean;
+  desactivada?: boolean;
   proyecto?: string;
   dependencias?: string[];
-  hideChildren?: boolean;
-  displayOrder?: number;
+  ocultarHijos?: boolean;
+  ordenVisual?: number;
 }
 
 export interface EventOption {
@@ -56,7 +56,7 @@ export interface EventOption {
    */
   onDateChange?: (
     tarea: Tarea,
-    children: Tarea[]
+    hijos: Tarea[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Se activa al cambiar el progreso.
@@ -64,7 +64,7 @@ export interface EventOption {
    */
   onProgressChange?: (
     tarea: Tarea,
-    children: Tarea[]
+    hijos: Tarea[]
   ) => void | boolean | Promise<void> | Promise<boolean>;
   /**
    * Se activa al eliminar la tarea seleccionada.
@@ -79,7 +79,7 @@ export interface EventOption {
 
 export interface DisplayOption {
   viewMode?: ViewMode;
-  viewDate?: Date;
+  vistaFecha?: Date;
   preStepsCount?: number;
   /**
    * Especifica el idioma del nombre del mes. Formatos compatibles: ISO 639-2, Java Locale
@@ -89,11 +89,11 @@ export interface DisplayOption {
 }
 
 export interface StylingOption {
-  headerHeight?: number;
+  altoCabecera?: number;
   anchoColumna?: number;
   listCellWidth?: string;
-  rowHeight?: number;
-  ganttHeight?: number;
+  altoFila?: number;
+  alturaGantt?: number;
   barCornerRadius?: number;
   handleWidth?: number;
   fontFamily?: string;
@@ -121,15 +121,15 @@ export interface StylingOption {
     fontSize: string;
     fontFamily: string;
   }>;
-  ListaTareasHeader?: React.FC<{
-    headerHeight: number;
-    rowWidth: string;
+  CabeceraListaTareas?: React.FC<{
+    altoCabecera: number;
+    anchoFila: string;
     fontFamily: string;
     fontSize: string;
   }>;
-  ListaTareasTable?: React.FC<{
-    rowHeight: number;
-    rowWidth: string;
+  TablaListaTareas?: React.FC<{
+    altoFila: number;
+    anchoFila: string;
     fontFamily: string;
     fontSize: string;
     locale: string;

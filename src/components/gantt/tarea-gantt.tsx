@@ -8,7 +8,7 @@ export type TareaGanttProps = {
   gridProps: GridProps;
   calendarProps: CalendarProps;
   barProps: TareaGanttContentProps;
-  ganttHeight: number;
+  alturaGantt: number;
   scrollY: number;
   scrollX: number;
 };
@@ -16,7 +16,7 @@ export const TareaGantt: React.FC<TareaGanttProps> = ({
   gridProps,
   calendarProps,
   barProps,
-  ganttHeight,
+  alturaGantt,
   scrollY,
   scrollX,
 }) => {
@@ -46,7 +46,7 @@ export const TareaGantt: React.FC<TareaGanttProps> = ({
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={gridProps.svgWidth}
-        height={calendarProps.headerHeight}
+        height={calendarProps.altoCabecera}
         fontFamily={barProps.fontFamily}
       >
         <Calendar {...calendarProps} />
@@ -55,15 +55,15 @@ export const TareaGantt: React.FC<TareaGanttProps> = ({
         ref={horizontalContainerRef}
         className={styles.horizontalContainer}
         style={
-          ganttHeight
-            ? { height: ganttHeight, width: gridProps.svgWidth }
+          alturaGantt
+            ? { height: alturaGantt, width: gridProps.svgWidth }
             : { width: gridProps.svgWidth }
         }
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={gridProps.svgWidth}
-          height={barProps.rowHeight * barProps.tareas.length}
+          height={barProps.altoFila * barProps.tareas.length}
           fontFamily={barProps.fontFamily}
           ref={ganttSVGRef}
         >

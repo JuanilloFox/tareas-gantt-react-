@@ -64,7 +64,7 @@ export const TareaItem: React.FC<TareaItemProps> = props => {
 
   const getX = () => {
     const width = tarea.x2 - tarea.x1;
-    const hasChild = tarea.barChildren.length > 0;
+    const hasChild = tarea.barraHijos.length > 0;
     if (isTextInside) {
       return tarea.x1 + width * 0.5;
     }

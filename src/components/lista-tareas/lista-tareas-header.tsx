@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./lista-tareas-header.module.css";
 
-export const ListaTareasHeaderDefault: React.FC<{
-  headerHeight: number;
-  rowWidth: string;
+export const CabeceraListaTareasPredeterminada: React.FC<{
+  altoCabecera: number;
+  anchoFila: string;
   fontFamily: string;
   fontSize: string;
-}> = ({ headerHeight, fontFamily, fontSize, rowWidth }) => {
+}> = ({ altoCabecera, fontFamily, fontSize, anchoFila }) => {
   return (
     <div
       className={styles.ganttTable}
@@ -18,46 +18,46 @@ export const ListaTareasHeaderDefault: React.FC<{
       <div
         className={styles.ganttTable_Header}
         style={{
-          height: headerHeight - 2,
+          height: altoCabecera - 2,
         }}
       >
         <div
           className={styles.ganttTable_HeaderItem}
           style={{
-            minWidth: rowWidth,
+            minWidth: anchoFila,
           }}
         >
-          &nbsp;Name
+          &nbsp;Nombre
         </div>
         <div
           className={styles.ganttTable_HeaderSeparator}
           style={{
-            height: headerHeight * 0.5,
-            marginTop: headerHeight * 0.2,
+            height: altoCabecera * 0.5,
+            marginTop: altoCabecera * 0.2,
           }}
         />
         <div
           className={styles.ganttTable_HeaderItem}
           style={{
-            minWidth: rowWidth,
+            minWidth: anchoFila,
           }}
         >
-          &nbsp;From
+          &nbsp;Desde
         </div>
         <div
           className={styles.ganttTable_HeaderSeparator}
           style={{
-            height: headerHeight * 0.5,
-            marginTop: headerHeight * 0.25,
+            height: altoCabecera * 0.5,
+            marginTop: altoCabecera * 0.25,
           }}
         />
         <div
           className={styles.ganttTable_HeaderItem}
           style={{
-            minWidth: rowWidth,
+            minWidth: anchoFila,
           }}
         >
-          &nbsp;To
+          &nbsp;Hasta
         </div>
       </div>
     </div>

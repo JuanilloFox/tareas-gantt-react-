@@ -2,8 +2,7 @@ import React from "react";
 import { Tarea, ViewMode, Gantt } from "tareas-gantt-react";
 import { ViewSwitcher } from "./components/view-switcher";
 import { getFechaInicioFinParaProyecto, initTareas } from "./Auxiliar";
-//import "tareas-gantt-react/dist/index.css";
-import "tareas-gantt-react/dist/index.css" ;
+import "tareas-gantt-react/dist/index.css";
 
 // Init
 const App = () => {
@@ -75,7 +74,7 @@ const App = () => {
         onViewListChange={setIsChecked}
         isChecked={isChecked}
       />
-      <h3>Gantt With Unlimited Height</h3>
+      <h3>Gantt con altura ilimitada</h3>
       <Gantt
         tareas={tareas}
         viewMode={view}
@@ -89,7 +88,7 @@ const App = () => {
         listCellWidth={isChecked ? "155px" : ""}
         anchoColumna={anchoColumna}
       />
-      <h3>Gantt With Limited Height</h3>
+      <h3>Gantt con altura limitada</h3>
       <Gantt
         tareas={tareas}
         viewMode={view}

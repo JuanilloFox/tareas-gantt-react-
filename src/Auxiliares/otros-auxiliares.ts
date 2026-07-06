@@ -19,19 +19,19 @@ export function isBarraTareas(tarea: Tarea | BarraTareas): tarea is BarraTareas 
 
 export function retirarTareasOcultas(tareas: Tarea[]) {
   const tareasAgrupadas = tareas.filter(
-    t => t.hideChildren && t.tipo === "proyecto"
+    t => t.ocultarHijos && t.tipo === "proyecto"
   );
   if (tareasAgrupadas.length > 0) {
     for (let i = 0; tareasAgrupadas.length > i; i++) {
       const tareaAgrupada = tareasAgrupadas[i];
-      const children = getChildren(tareas, tareaAgrupada);
-      tareas = tareas.filter(t => children.indexOf(t) === -1);
+      const hijos = getHijos(tareas, tareaAgrupada);
+      tareas = tareas.filter(t => hijos.indexOf(t) === -1);
     }
   }
   return tareas;
 }
 
-function getChildren(listaTareas: Tarea[], tarea: Tarea) {
+function getHijos(listaTareas: Tarea[], tarea: Tarea) {
   let tareas: Tarea[] = [];
   if (tarea.tipo !== "proyecto") {
     tareas = listaTareas.filter(
@@ -42,18 +42,18 @@ function getChildren(listaTareas: Tarea[], tarea: Tarea) {
   }
   var tareaHija: Tarea[] = [];
   tareas.forEach(t => {
-    tareaHija.push(...getChildren(listaTareas, t));
+    tareaHija.push(...getHijos(listaTareas, t));
   })
   tareas = tareas.concat(tareas, tareaHija);
   return tareas;
 }
 
 export const ordenarTareas = (tareaA: Tarea, tareaB: Tarea) => {
-  const orderA = tareaA.displayOrder || Number.MAX_VALUE;
-  const orderB = tareaB.displayOrder || Number.MAX_VALUE;
-  if (orderA > orderB) {
+  const ordenA = tareaA.ordenVisual || Number.MAX_VALUE;
+  const ordenB = tareaB.ordenVisual || Number.MAX_VALUE;
+  if (ordenA > ordenB) {
     return 1;
-  } else if (orderA < orderB) {
+  } else if (ordenA < ordenB) {
     return -1;
   } else {
     return 0;

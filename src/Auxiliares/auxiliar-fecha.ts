@@ -4,7 +4,7 @@ type DateHelperScales =
   | "year"
   | "month"
   | "day"
-  | "hour"
+  | "hora"
   | "minute"
   | "second"
   | "millisecond";
@@ -17,39 +17,41 @@ export const getCachedDateTimeFormat = (
   opts: Intl.DateTimeFormatOptions = {}
 ): Intl.DateTimeFormat => {
   // Generación de una clave de string plana y rápida en lugar de usar JSON.stringify
-  const key = `${Array.isArray(locString) ? locString.join(",") : locString}-${opts.weekday || ""}-${opts.month || ""}`;
+  const clave = `${Array.isArray(locString)
+    ? locString.join(",")
+    : locString}-${opts.weekday || ""}-${opts.month || ""}`;
 
-  let dtf = intlDTCache[key];
+  let dtf = intlDTCache[clave];
   if (!dtf) {
     dtf = new Intl.DateTimeFormat(locString, opts);
-    intlDTCache[key] = dtf;
+    intlDTCache[clave] = dtf;
   }
   return dtf;
 };
 
-export const addToDate = (
-  date: Date,
+export const agregarAFecha = (
+  fecha: Date,
   quantity: number,
   scale: DateHelperScales
 ): Date => {
   // Retorna una nueva instancia limpia sin mutar el objeto 'date' original
   return new Date(
-    date.getFullYear() + (scale === "year" ? quantity : 0),
-    date.getMonth() + (scale === "month" ? quantity : 0),
-    date.getDate() + (scale === "day" ? quantity : 0),
-    date.getHours() + (scale === "hour" ? quantity : 0),
-    date.getMinutes() + (scale === "minute" ? quantity : 0),
-    date.getSeconds() + (scale === "second" ? quantity : 0),
-    date.getMilliseconds() + (scale === "millisecond" ? quantity : 0)
+    fecha.getFullYear() + (scale === "year" ? quantity : 0),
+    fecha.getMonth() + (scale === "month" ? quantity : 0),
+    fecha.getDate() + (scale === "day" ? quantity : 0),
+    fecha.getHours() + (scale === "hora" ? quantity : 0),
+    fecha.getMinutes() + (scale === "minute" ? quantity : 0),
+    fecha.getSeconds() + (scale === "second" ? quantity : 0),
+    fecha.getMilliseconds() + (scale === "millisecond" ? quantity : 0)
   );
 };
 
-export const startOfDate = (date: Date, scale: DateHelperScales): Date => {
+export const startOfDate = (fecha: Date, scale: DateHelperScales): Date => {
   const scores: DateHelperScales[] = [
     "millisecond",
     "second",
     "minute",
-    "hour",
+    "hora",
     "day",
     "month",
     "year",
@@ -59,13 +61,13 @@ export const startOfDate = (date: Date, scale: DateHelperScales): Date => {
   const shouldReset = (_scale: DateHelperScales) => scores.indexOf(_scale) <= maxScore;
 
   return new Date(
-    date.getFullYear(),
-    shouldReset("year") ? 0 : date.getMonth(),
-    shouldReset("month") ? 1 : date.getDate(),
-    shouldReset("day") ? 0 : date.getHours(),
-    shouldReset("hour") ? 0 : date.getMinutes(),
-    shouldReset("minute") ? 0 : date.getSeconds(),
-    shouldReset("second") ? 0 : date.getMilliseconds()
+    fecha.getFullYear(),
+    shouldReset("year") ? 0 : fecha.getMonth(),
+    shouldReset("month") ? 1 : fecha.getDate(),
+    shouldReset("day") ? 0 : fecha.getHours(),
+    shouldReset("hora") ? 0 : fecha.getMinutes(),
+    shouldReset("minute") ? 0 : fecha.getSeconds(),
+    shouldReset("second") ? 0 : fecha.getMilliseconds()
   );
 };
 
@@ -76,95 +78,95 @@ export const ganttDateRange = (
 ): [Date, Date] => {
   if (!tareas.length) return [new Date(), new Date()];
 
-  let newStartDate: Date = new Date(tareas[0].inicio.getTime());
-  let newEndDate: Date = new Date(tareas[0].fin.getTime());
+  let nuevaFechaInicio: Date = new Date(tareas[0].inicio.getTime());
+  let nuevaFechaFin: Date = new Date(tareas[0].fin.getTime());
 
   for (const tarea of tareas) {
-    if (tarea.inicio < newStartDate) {
-      newStartDate = new Date(tarea.inicio.getTime());
+    if (tarea.inicio < nuevaFechaInicio) {
+      nuevaFechaInicio = new Date(tarea.inicio.getTime());
     }
-    if (tarea.fin > newEndDate) {
-      newEndDate = new Date(tarea.fin.getTime());
+    if (tarea.fin > nuevaFechaFin) {
+      nuevaFechaFin = new Date(tarea.fin.getTime());
     }
   }
 
   switch (viewMode) {
     case ViewMode.Year:
-      newStartDate = startOfDate(addToDate(newStartDate, -1, "year"), "year");
-      newEndDate = startOfDate(addToDate(newEndDate, 1, "year"), "year");
+      nuevaFechaInicio = startOfDate(agregarAFecha(nuevaFechaInicio, -1, "year"), "year");
+      nuevaFechaFin = startOfDate(agregarAFecha(nuevaFechaFin, 1, "year"), "year");
       break;
     case ViewMode.QuarterYear:
-      newStartDate = startOfDate(addToDate(newStartDate, -3, "month"), "month");
-      newEndDate = startOfDate(addToDate(newEndDate, 3, "year"), "year");
+      nuevaFechaInicio = startOfDate(agregarAFecha(nuevaFechaInicio, -3, "month"), "month");
+      nuevaFechaFin = startOfDate(agregarAFecha(nuevaFechaFin, 3, "year"), "year");
       break;
     case ViewMode.Month:
-      newStartDate = startOfDate(addToDate(newStartDate, -1 * preStepsCount, "month"), "month");
-      newEndDate = startOfDate(addToDate(newEndDate, 1, "year"), "year");
+      nuevaFechaInicio = startOfDate(agregarAFecha(nuevaFechaInicio, -1 * preStepsCount, "month"), "month");
+      nuevaFechaFin = startOfDate(agregarAFecha(nuevaFechaFin, 1, "year"), "year");
       break;
     case ViewMode.Week:
-      newStartDate = startOfDate(newStartDate, "day");
-      newStartDate = addToDate(getMonday(newStartDate), -7 * preStepsCount, "day");
-      newEndDate = addToDate(startOfDate(newEndDate, "day"), 1.5, "month");
+      nuevaFechaInicio = startOfDate(nuevaFechaInicio, "day");
+      nuevaFechaInicio = agregarAFecha(getMonday(nuevaFechaInicio), -7 * preStepsCount, "day");
+      nuevaFechaFin = agregarAFecha(startOfDate(nuevaFechaFin, "day"), 1.5, "month");
       break;
     case ViewMode.Day:
-      newStartDate = addToDate(startOfDate(newStartDate, "day"), -1 * preStepsCount, "day");
-      newEndDate = addToDate(startOfDate(newEndDate, "day"), 19, "day");
+      nuevaFechaInicio = agregarAFecha(startOfDate(nuevaFechaInicio, "day"), -1 * preStepsCount, "day");
+      nuevaFechaFin = agregarAFecha(startOfDate(nuevaFechaFin, "day"), 19, "day");
       break;
     case ViewMode.QuarterDay:
-      newStartDate = addToDate(startOfDate(newStartDate, "day"), -1 * preStepsCount, "day");
-      newEndDate = addToDate(startOfDate(newEndDate, "day"), 66, "hour");
+      nuevaFechaInicio = agregarAFecha(startOfDate(nuevaFechaInicio, "day"), -1 * preStepsCount, "day");
+      nuevaFechaFin = agregarAFecha(startOfDate(nuevaFechaFin, "day"), 66, "hora");
       break;
     case ViewMode.HalfDay:
-      newStartDate = addToDate(startOfDate(newStartDate, "day"), -1 * preStepsCount, "day");
-      newEndDate = addToDate(startOfDate(newEndDate, "day"), 108, "hour");
+      nuevaFechaInicio = agregarAFecha(startOfDate(nuevaFechaInicio, "day"), -1 * preStepsCount, "day");
+      nuevaFechaFin = agregarAFecha(startOfDate(nuevaFechaFin, "day"), 108, "hora");
       break;
-    case ViewMode.Hour:
-      newStartDate = addToDate(startOfDate(newStartDate, "hour"), -1 * preStepsCount, "hour");
-      newEndDate = addToDate(startOfDate(newEndDate, "day"), 1, "day");
+    case ViewMode.Hora:
+      nuevaFechaInicio = agregarAFecha(startOfDate(nuevaFechaInicio, "hora"), -1 * preStepsCount, "hora");
+      nuevaFechaFin = agregarAFecha(startOfDate(nuevaFechaFin, "day"), 1, "day");
       break;
   }
-  return [newStartDate, newEndDate];
+  return [nuevaFechaInicio, nuevaFechaFin];
 };
 
-export const seedDates = (
-  startDate: Date,
-  endDate: Date,
+export const semillaFechas = (
+  fechaInicio: Date,
+  fechaFin: Date,
   viewMode: ViewMode
 ): Date[] => {
-  let currentDate: Date = new Date(startDate.getTime());
-  const dates: Date[] = [new Date(currentDate.getTime())];
+  let fechaActual: Date = new Date(fechaInicio.getTime());
+  const fechas: Date[] = [new Date(fechaActual.getTime())];
 
-  while (currentDate < endDate) {
+  while (fechaActual < fechaFin) {
     switch (viewMode) {
       case ViewMode.Year:
-        currentDate = addToDate(currentDate, 1, "year");
+        fechaActual = agregarAFecha(fechaActual, 1, "year");
         break;
       case ViewMode.QuarterYear:
-        currentDate = addToDate(currentDate, 3, "month");
+        fechaActual = agregarAFecha(fechaActual, 3, "month");
         break;
       case ViewMode.Month:
-        currentDate = addToDate(currentDate, 1, "month");
+        fechaActual = agregarAFecha(fechaActual, 1, "month");
         break;
       case ViewMode.Week:
-        currentDate = addToDate(currentDate, 7, "day");
+        fechaActual = agregarAFecha(fechaActual, 7, "day");
         break;
       case ViewMode.Day:
-        currentDate = addToDate(currentDate, 1, "day");
+        fechaActual = agregarAFecha(fechaActual, 1, "day");
         break;
       case ViewMode.HalfDay:
-        currentDate = addToDate(currentDate, 12, "hour");
+        fechaActual = agregarAFecha(fechaActual, 12, "hora");
         break;
       case ViewMode.QuarterDay:
-        currentDate = addToDate(currentDate, 6, "hour");
+        fechaActual = agregarAFecha(fechaActual, 6, "hora");
         break;
-      case ViewMode.Hour:
-        currentDate = addToDate(currentDate, 1, "hour");
+      case ViewMode.Hora:
+        fechaActual = agregarAFecha(fechaActual, 1, "hora");
         break;
     }
     // Clonamos explícitamente para no llenar el array con referencias al mismo objeto mutable
-    dates.push(new Date(currentDate.getTime()));
+    fechas.push(new Date(fechaActual.getTime()));
   }
-  return dates;
+  return fechas;
 };
 
 // Función auxiliar privada para capitalizar de forma segura y robusta strings de cualquier idioma

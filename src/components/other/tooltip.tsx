@@ -10,11 +10,11 @@ export type TooltipProps = {
   svgContainerHeight: number;
   svgContainerWidth: number;
   svgWidth: number;
-  headerHeight: number;
-  listaTareasWidth: number;
+  altoCabecera: number;
+  anchoListaTareas: number;
   scrollX: number;
   scrollY: number;
-  rowHeight: number;
+  altoFila: number;
   fontSize: string;
   fontFamily: string;
   TooltipContent: React.FC<{
@@ -25,7 +25,7 @@ export type TooltipProps = {
 };
 export const Tooltip: React.FC<TooltipProps> = ({
   tarea,
-  rowHeight,
+  altoFila,
   rtl,
   svgContainerHeight,
   svgContainerWidth,
@@ -34,8 +34,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
   arrowIndent,
   fontSize,
   fontFamily,
-  headerHeight,
-  listaTareasWidth,
+  altoCabecera,
+  anchoListaTareas,
   TooltipContent,
 }) => {
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +46,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       const tooltipHeight = tooltipRef.current.offsetHeight * 1.1;
       const tooltipWidth = tooltipRef.current.offsetWidth * 1.1;
 
-      let newRelatedY = tarea.index * rowHeight - scrollY + headerHeight;
+      let newRelatedY = tarea.index * altoFila - scrollY + altoCabecera;
       let newRelatedX: number;
       if (rtl) {
         newRelatedX = tarea.x1 - arrowIndent * 1.5 - tooltipWidth - scrollX;
@@ -56,23 +56,23 @@ export const Tooltip: React.FC<TooltipProps> = ({
         const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
         if (tooltipLeftmostPoint > svgContainerWidth) {
           newRelatedX = svgContainerWidth - tooltipWidth;
-          newRelatedY += rowHeight;
+          newRelatedY += altoFila;
         }
       } else {
-        newRelatedX = tarea.x2 + arrowIndent * 1.5 + listaTareasWidth - scrollX;
+        newRelatedX = tarea.x2 + arrowIndent * 1.5 + anchoListaTareas - scrollX;
         const tooltipLeftmostPoint = tooltipWidth + newRelatedX;
-        const fullChartWidth = listaTareasWidth + svgContainerWidth;
+        const fullChartWidth = anchoListaTareas + svgContainerWidth;
         if (tooltipLeftmostPoint > fullChartWidth) {
           newRelatedX =
             tarea.x1 +
-            listaTareasWidth -
+            anchoListaTareas -
             arrowIndent * 1.5 -
             scrollX -
             tooltipWidth;
         }
-        if (newRelatedX < listaTareasWidth) {
-          newRelatedX = svgContainerWidth + listaTareasWidth - tooltipWidth;
-          newRelatedY += rowHeight;
+        if (newRelatedX < anchoListaTareas) {
+          newRelatedX = svgContainerWidth + anchoListaTareas - tooltipWidth;
+          newRelatedY += altoFila;
         }
       }
 
@@ -89,9 +89,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
     arrowIndent,
     scrollX,
     scrollY,
-    headerHeight,
-    listaTareasWidth,
-    rowHeight,
+    altoCabecera,
+    anchoListaTareas,
+    altoFila,
     svgContainerHeight,
     svgContainerWidth,
     rtl,

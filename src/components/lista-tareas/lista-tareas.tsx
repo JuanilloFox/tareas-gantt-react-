@@ -3,12 +3,12 @@ import { BarraTareas } from "../../types/barra-tareas";
 import { Tarea } from "../../types/public-types";
 
 export type ListaTareasProps = {
-  headerHeight: number;
-  rowWidth: string;
+  altoCabecera: number;
+  anchoFila: string;
   fontFamily: string;
   fontSize: string;
-  rowHeight: number;
-  ganttHeight: number;
+  altoFila: number;
+  alturaGantt: number;
   scrollY: number;
   locale: string;
   tareas: Tarea[];
@@ -17,15 +17,15 @@ export type ListaTareasProps = {
   tareaSeleccionada: BarraTareas | undefined;
   setTareaSeleccionada: (tarea: string) => void;
   onExpanderClick: (tarea: Tarea) => void;
-  ListaTareasHeader: React.FC<{
-    headerHeight: number;
-    rowWidth: string;
+  CabeceraListaTareas: React.FC<{
+    altoCabecera: number;
+    anchoFila: string;
     fontFamily: string;
     fontSize: string;
   }>;
-  ListaTareasTable: React.FC<{
-    rowHeight: number;
-    rowWidth: string;
+  TablaListaTareas: React.FC<{
+    altoFila: number;
+    anchoFila: string;
     fontFamily: string;
     fontSize: string;
     locale: string;
@@ -37,22 +37,22 @@ export type ListaTareasProps = {
 };
 
 export const ListaTareas: React.FC<ListaTareasProps> = ({
-  headerHeight,
+  altoCabecera,
   fontFamily,
   fontSize,
-  rowWidth,
-  rowHeight,
+  anchoFila,
+  altoFila,
   scrollY,
   tareas,
   tareaSeleccionada,
   setTareaSeleccionada,
   onExpanderClick,
   locale,
-  ganttHeight,
+  alturaGantt,
   listaTareasRef,
   horizontalContainerClass,
-  ListaTareasHeader,
-  ListaTareasTable,
+  CabeceraListaTareas,
+  TablaListaTareas,
 }) => {
   const horizontalContainerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -62,15 +62,15 @@ export const ListaTareas: React.FC<ListaTareasProps> = ({
   }, [scrollY]);
 
   const headerProps = {
-    headerHeight,
+    altoCabecera,
     fontFamily,
     fontSize,
-    rowWidth,
+    anchoFila,
   };
   const tareaSeleccionadaId = tareaSeleccionada ? tareaSeleccionada.id : "";
-  const tableProps = {
-    rowHeight,
-    rowWidth,
+  const tablaProps = {
+    altoFila,
+    anchoFila,
     fontFamily,
     fontSize,
     tareas,
@@ -82,13 +82,13 @@ export const ListaTareas: React.FC<ListaTareasProps> = ({
 
   return (
     <div ref={listaTareasRef}>
-      <ListaTareasHeader {...headerProps} />
+      <CabeceraListaTareas {...headerProps} />
       <div
         ref={horizontalContainerRef}
         className={horizontalContainerClass}
-        style={ganttHeight ? { height: ganttHeight } : {}}
+        style={alturaGantt ? { height: alturaGantt } : {}}
       >
-        <ListaTareasTable {...tableProps} />
+        <TablaListaTareas {...tablaProps} />
       </div>
     </div>
   );

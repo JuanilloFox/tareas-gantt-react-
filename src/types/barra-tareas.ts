@@ -11,7 +11,7 @@ export interface BarraTareas extends Tarea {
   anchoProgreso: number;
   barCornerRadius: number;
   handleWidth: number;
-  barChildren: BarraTareas[];
+  barraHijos: BarraTareas[];
   styles: {
     backgroundColor: string;
     backgroundSelectedColor: string;

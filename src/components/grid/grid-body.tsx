@@ -1,21 +1,21 @@
 import React, { ReactChild } from "react";
 import { Tarea } from "../../types/public-types";
-import { addToDate } from "../../Auxiliares/auxiliar-fecha";
+import { agregarAFecha } from "../../Auxiliares/auxiliar-fecha";
 import styles from "./grid.module.css";
 
 export type GridBodyProps = {
   tareas: Tarea[];
-  dates: Date[];
+  fechas: Date[];
   svgWidth: number;
-  rowHeight: number;
+  altoFila: number;
   anchoColumna: number;
   todayColor: string;
   rtl: boolean;
 };
 export const GridBody: React.FC<GridBodyProps> = ({
   tareas,
-  dates,
-  rowHeight,
+  fechas,
+  altoFila,
   svgWidth,
   anchoColumna,
   todayColor,
@@ -40,7 +40,7 @@ export const GridBody: React.FC<GridBodyProps> = ({
         x="0"
         y={y}
         width={svgWidth}
-        height={rowHeight}
+        height={altoFila}
         className={styles.gridRow}
       />
     );
@@ -48,21 +48,21 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <line
         key={"RowLine" + tarea.id}
         x="0"
-        y1={y + rowHeight}
+        y1={y + altoFila}
         x2={svgWidth}
-        y2={y + rowHeight}
+        y2={y + altoFila}
         className={styles.gridRowLine}
       />
     );
-    y += rowHeight;
+    y += altoFila;
   }
 
   const now = new Date();
   let tickX = 0;
   const ticks: ReactChild[] = [];
   let today: ReactChild = <rect />;
-  for (let i = 0; i < dates.length; i++) {
-    const date = dates[i];
+  for (let i = 0; i < fechas.length; i++) {
+    const date = fechas[i];
     ticks.push(
       <line
         key={date.getTime()}
@@ -74,16 +74,16 @@ export const GridBody: React.FC<GridBodyProps> = ({
       />
     );
     if (
-      (i + 1 !== dates.length &&
+      (i + 1 !== fechas.length &&
         date.getTime() < now.getTime() &&
-        dates[i + 1].getTime() >= now.getTime()) ||
+        fechas[i + 1].getTime() >= now.getTime()) ||
       // if current date is last
       (i !== 0 &&
-        i + 1 === dates.length &&
+        i + 1 === fechas.length &&
         date.getTime() < now.getTime() &&
-        addToDate(
+        agregarAFecha(
           date,
-          date.getTime() - dates[i - 1].getTime(),
+          date.getTime() - fechas[i - 1].getTime(),
           "millisecond"
         ).getTime() >= now.getTime())
     ) {
@@ -100,9 +100,9 @@ export const GridBody: React.FC<GridBodyProps> = ({
     // rtl for today
     if (
       rtl &&
-      i + 1 !== dates.length &&
+      i + 1 !== fechas.length &&
       date.getTime() >= now.getTime() &&
-      dates[i + 1].getTime() < now.getTime()
+      fechas[i + 1].getTime() < now.getTime()
     ) {
       today = (
         <rect

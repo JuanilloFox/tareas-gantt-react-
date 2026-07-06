@@ -26,7 +26,7 @@ let tareas: Tarea[] = [
       id: 'Tarea 0',
       tipo:'tarea',
       progreso: 45,
-      isDisabled: true,
+      desactivada: true,
       styles: { progressColor: '#ffbb54', progressSelectedColor: '#ff9e0d' },
     },
     ...
@@ -81,10 +81,10 @@ npm start
 |                      |                                  | onClick de la barra de tareas.                             |
 | onDelete\*           | (tarea: Tarea) => void/boolean/  | Especifica la función que se ejecutará en la barra de      |
 |                      | Promise<void>/Promise<boolean>   | tareas al pulsar el botón Eliminar.                        |
-| onDateChange\*       | (tarea: Tarea, children: Tarea[])| Especifica la función que se ejecutará cuando finalice el  |
+| onDateChange\*       | (tarea: Tarea, hijos: Tarea[])   | Especifica la función que se ejecutará cuando finalice el  |
 |                      | => void/boolean/Promise<void>/   | evento de arrastrar la barra de tareas en la línea de      |
 |                      | Promise<boolean>                 | tiempo.                                                    |
-| onProgressChange\*   | (tarea: Tarea, children: Tarea[])| Especifica la función que se ejecutará cuando finalice el  |
+| onProgressChange\*   | (tarea: Tarea, hijos: Tarea[])   | Especifica la función que se ejecutará cuando finalice el  |
 |                      | => void/boolean/Promise<void>/   | evento de progreso de arrastre de la barra de tareas.      |
 |                      | Promise<boolean>                 |                                                            |
 | onExpanderClick\*    | onExpanderClick: (tarea: Tarea)  | Especifica la función que se ejecutará al hacer clic       |
@@ -92,7 +92,7 @@ npm start
 | timeStep             | number                           | Valor del intervalo de tiempo para onDateChange.           |
 |                      |                                  | Especifique en milisegundos.                               |
 
-\* El gráfico deshace la operación si el método devuelve falso o error. El parámetro children devuelve registros de un nivel de profundidad.
+\* El gráfico deshace la operación si el método devuelve falso o error. El parámetro 'hijos' devuelve registros de un nivel de profundidad.
 
 ### DisplayOption
 
@@ -101,7 +101,7 @@ npm start
 | :------------- | :------ | :------------------------------------------------------------------------------------- |
 | viewMode       | enum    | Especifica la escala de tiempo. Hora, Cuarto de día, Medio día, Día, Semana            |
 |                |         |  (ISO-8601, el primer día es lunes), Mes, Trimestre, Año.                              |
-| viewDate       | date    | Especifica la fecha y la hora de visualización.                                        |
+| vistaFecha     | date    | Especifica la fecha y la hora de visualización.                                        |
 | preStepsCount  | number  | Especifica un espacio vacío antes de la primera tarea.                                 |
 | locale         | string  | Especifica el idioma del nombre del mes. Formatos compatibles: ISO 639-2, Java Locale. |
 | rtl            | boolean | Configura el modo RTL.                                                                 |
@@ -110,13 +110,13 @@ npm start
 
 | Nombre del parámetro       | Tipo   | Descripción                                                                 |
 | :------------------------- | :----- | :-------------------------------------------------------------------------- |
-| headerHeight               | number | Especifica la altura del encabezado.                                        |
-| ganttHeight                | number | Especifica la altura del diagrama de Gantt sin encabezado. El valor         |
+| altoCabecera               | number | Especifica la altura del encabezado.                                        |
+| alturaGantt                | number | Especifica la altura del diagrama de Gantt sin encabezado. El valor         |
 |                            |        | predeterminado es 0. Esto significa que no hay limitación de altura.        |
 | anchoColumna               | number | Especifica la duración del período de tiempo.                               |
 | listCellWidth              | string | Especifica el ancho de la celda de la lista de tareas. Una cadena vacía     |
 |                            |        | significa "no mostrar".                                                     |
-| rowHeight                  | number | Especifica la altura de la fila de tareas.                                  |
+| altoFila                   | number | Especifica la altura de la fila de tareas.                                  |
 | barCornerRadius            | number | Especifica el redondeo de las esquinas de la barra de tareas.               |
 | barFill                    | number | Especifica la ocupación de la barra de tareas. Se establece en porcentaje   |
 |                            |        | de 0 a 100.                                                                 |
@@ -138,12 +138,12 @@ npm start
 | todayColor                 | string | Especifica el color de relleno de la columna del período actual.            |
 | TooltipContent             |        | Especifica la vista de información sobre herramientas para la barra de      |
 |                            |        | tareas seleccionada.                                                        |
-| ListaTareasHeader          |        | Especifica la vista de encabezado de la lista de tareas                     |
-| ListaTareasTable           |        | Especifica la vista de tabla de la lista de tareas                          |
+| CabeceraListaTareas        |        | Especifica la vista de encabezado de la lista de tareas                     |
+| TablaListaTareas           |        | Especifica la vista de tabla de la lista de tareas                          |
 
 - TooltipContent: [`React.FC<{ tarea: Tarea; fontSize: string; fontFamily: string; }>;`](https://github.com/JuanilloFox/tareas-gantt-react/blob/main/src/components/other/tooltip.tsx#L56)
-- ListaTareasHeader: `React.FC<{ headerHeight: number; rowWidth: string; fontFamily: string; fontSize: string;}>;`
-- ListaTareasTable: `React.FC<{ rowHeight: number; rowWidth: string; fontFamily: string; fontSize: string; locale: string; tareas: Tarea[]; tareaSeleccionadaId: string; setTareaSeleccionada: (treaId: string) => void; }>;`
+- CabeceraListaTareas: `React.FC<{ altoCabecera: number; anchoFila: string; fontFamily: string; fontSize: string;}>;`
+- TablaListaTareas: `React.FC<{ altoFila: number; anchoFila: string; fontFamily: string; fontSize: string; locale: string; tareas: Tarea[]; tareaSeleccionadaId: string; setTareaSeleccionada: (treaId: string) => void; }>;`
 
 ### Tarea
 
@@ -167,10 +167,10 @@ npm start
 |                |          |   progreso.                                                                            |
 |                |          | - **progressSelectedColor**: Cadena. Especifica el color de relleno de la barra de     |
 |                |          |   progreso de forma global al seleccionarla.                                           |
-| isDisabled     | bool     | Deshabilita todas las acciones para la tarea actual.                                   |
+| desactivada    | bool     | Deshabilita todas las acciones para la tarea actual.                                   |
 | fontSize       | string   | Especifica el tamaño de fuente de la barra de tareas localmente.                       |
 | proyecto       | string   | Nombre del proyecto de tarea                                                           |
-| hideChildren   | bool     | Ocultar elementos secundarios. El parámetro funciona solo con el tipo de proyecto.     |
+| ocultarHijos   | bool     | Ocultar elementos secundarios. El parámetro funciona solo con el tipo de proyecto.     |
 
 \*Requerido
 

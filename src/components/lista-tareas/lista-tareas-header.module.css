@@ -22,7 +22,7 @@
   vertical-align: middle;
 }
 
-.listaTareasTableRow {
+.tablaListaTareasFila {
   display: flex;
   align-items: center;
   height: var(--row-height); /* Usa la variable inyectada */

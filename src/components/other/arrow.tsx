@@ -4,7 +4,7 @@ import { BarraTareas } from "../../types/barra-tareas";
 type ArrowProps = {
   tareaDesde: BarraTareas;
   tareaHasta: BarraTareas;
-  rowHeight: number;
+  altoFila: number;
   altoTarea: number;
   arrowIndent: number;
   rtl: boolean;
@@ -12,7 +12,7 @@ type ArrowProps = {
 export const Arrow: React.FC<ArrowProps> = ({
   tareaDesde,
   tareaHasta,
-  rowHeight,
+  altoFila,
   altoTarea,
   arrowIndent,
   rtl,
@@ -23,7 +23,7 @@ export const Arrow: React.FC<ArrowProps> = ({
     [path, trianglePoints] = drownPathAndTriangleRTL(
       tareaDesde,
       tareaHasta,
-      rowHeight,
+      altoFila,
       altoTarea,
       arrowIndent
     );
@@ -31,7 +31,7 @@ export const Arrow: React.FC<ArrowProps> = ({
     [path, trianglePoints] = drownPathAndTriangle(
       tareaDesde,
       tareaHasta,
-      rowHeight,
+      altoFila,
       altoTarea,
       arrowIndent
     );
@@ -48,7 +48,7 @@ export const Arrow: React.FC<ArrowProps> = ({
 const drownPathAndTriangle = (
   tareaDesde: BarraTareas,
   tareaHasta: BarraTareas,
-  rowHeight: number,
+  altoFila: number,
   altoTarea: number,
   arrowIndent: number
 ) => {
@@ -64,7 +64,7 @@ const drownPathAndTriangle = (
 
   const path = `M ${tareaDesde.x2} ${tareaDesde.y + altoTarea / 2}
   h ${arrowIndent}
-  v ${(indexCompare * rowHeight) / 2}
+  v ${(indexCompare * altoFila) / 2}
   ${taskFromHorizontalOffsetValue}
   V ${tareaAPosicionFinal}
   h ${taskToHorizontalOffsetValue}`;
@@ -78,7 +78,7 @@ const drownPathAndTriangle = (
 const drownPathAndTriangleRTL = (
   tareaDesde: BarraTareas,
   tareaHasta: BarraTareas,
-  rowHeight: number,
+  altoFila: number,
   altoTarea: number,
   arrowIndent: number
 ) => {
@@ -94,7 +94,7 @@ const drownPathAndTriangleRTL = (
 
   const path = `M ${tareaDesde.x1} ${tareaDesde.y + altoTarea / 2}
   h ${-arrowIndent}
-  v ${(indexCompare * rowHeight) / 2}
+  v ${(indexCompare * altoFila) / 2}
   ${taskFromHorizontalOffsetValue}
   V ${tareaAPosicionFinal}
   h ${taskToHorizontalOffsetValue}`;

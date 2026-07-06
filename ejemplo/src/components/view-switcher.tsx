@@ -1,4 +1,5 @@
 import React from "react";
+//import "tareas-gantt-react/dist/index.css";
 import "tareas-gantt-react/dist/index.css";
 import { ViewMode } from "tareas-gantt-react";
 type ViewSwitcherProps = {
@@ -15,48 +16,48 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
     <div className="ViewContainer">
       <button
         className="Button"
-        onClick={() => onViewModeChange(ViewMode.Hour)}
+        onClick={() => onViewModeChange(ViewMode.Hora)}
       >
-        Hour
+        Hora
       </button>
       <button
         className="Button"
         onClick={() => onViewModeChange(ViewMode.QuarterDay)}
       >
-        Quarter of Day
+        Cuarto de Día
       </button>
       <button
         className="Button"
         onClick={() => onViewModeChange(ViewMode.HalfDay)}
       >
-        Half of Day
+        Medio Día
       </button>
       <button className="Button" onClick={() => onViewModeChange(ViewMode.Day)}>
-        Day
+        Día
       </button>
       <button
         className="Button"
         onClick={() => onViewModeChange(ViewMode.Week)}
       >
-        Week
+        Semana
       </button>
       <button
         className="Button"
         onClick={() => onViewModeChange(ViewMode.Month)}
       >
-        Month
+        Mes
       </button>
       <button
         className="Button"
         onClick={() => onViewModeChange(ViewMode.Year)}
       >
-        Year
+        Año
       </button>
       <button
         className="Button"
         onClick={() => onViewModeChange(ViewMode.QuarterYear)}
       >
-        Year
+        Cuarto de Año
       </button>
       <div className="Switch">
         <label className="Switch_Toggle">

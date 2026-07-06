@@ -65,12 +65,13 @@
     "dist"
   ],
   "dependencies": {
+    "gantt-task-react": "^0.3.9",
     "present": "^1.0.0",
     "scripts": "^0.1.0",
     "tareas-gantt-react": "^1.0.0"
   },
   "allowScripts": {
     "core-js-pure@3.49.0": true,
-    "core-js@2.6.12": true
+    "core-js@3.49.0": true
   }
 }

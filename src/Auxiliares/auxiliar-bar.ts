@@ -4,7 +4,7 @@ import { BarMoveAction } from "../types/tareas-gantt-actions";
 
 export const convertirABarrasTareas = (
   tareas: Tarea[],
-  dates: Date[],
+  fechas: Date[],
   anchoColumna: number,
   altoFila: number,
   altoTarea: number,
@@ -26,7 +26,7 @@ export const convertirABarrasTareas = (
     return convertirABarraTareas(
       t,
       i,
-      dates,
+      fechas,
       anchoColumna,
       altoFila,
       altoTarea,
@@ -53,7 +53,7 @@ export const convertirABarrasTareas = (
       const dependencia = barraTareas.findIndex(
         valor => valor.id === dependencias[j]
       );
-      if (dependencia !== -1) barraTareas[dependencia].barChildren.push(tarea);
+      if (dependencia !== -1) barraTareas[dependencia].barraHijos.push(tarea);
     }
     return tarea;
   });
@@ -64,7 +64,7 @@ export const convertirABarrasTareas = (
 const convertirABarraTareas = (
   tarea: Tarea,
   index: number,
-  dates: Date[],
+  fechas: Date[],
   anchoColumna: number,
   altoFila: number,
   altoTarea: number,
@@ -88,7 +88,7 @@ const convertirABarraTareas = (
       barraTareas = convertirAHito(
         tarea,
         index,
-        dates,
+        fechas,
         anchoColumna,
         altoFila,
         altoTarea,
@@ -102,7 +102,7 @@ const convertirABarraTareas = (
       barraTareas = convertToBar(
         tarea,
         index,
-        dates,
+        fechas,
         anchoColumna,
         altoFila,
         altoTarea,
@@ -119,7 +119,7 @@ const convertirABarraTareas = (
       barraTareas = convertToBar(
         tarea,
         index,
-        dates,
+        fechas,
         anchoColumna,
         altoFila,
         altoTarea,
@@ -139,7 +139,7 @@ const convertirABarraTareas = (
 const convertToBar = (
   tarea: Tarea,
   index: number,
-  dates: Date[],
+  fechas: Date[],
   anchoColumna: number,
   altoFila: number,
   altoTarea: number,
@@ -154,11 +154,11 @@ const convertToBar = (
   let x1: number;
   let x2: number;
   if (rtl) {
-    x2 = CoordenadaXTareaRTL(tarea.inicio, dates, anchoColumna);
-    x1 = CoordenadaXTareaRTL(tarea.fin, dates, anchoColumna);
+    x2 = CoordenadaXTareaRTL(tarea.inicio, fechas, anchoColumna);
+    x1 = CoordenadaXTareaRTL(tarea.fin, fechas, anchoColumna);
   } else {
-    x1 = CoordenadaXTarea(tarea.inicio, dates, anchoColumna);
-    x2 = CoordenadaXTarea(tarea.fin, dates, anchoColumna);
+    x1 = CoordenadaXTarea(tarea.inicio, fechas, anchoColumna);
+    x2 = CoordenadaXTarea(tarea.fin, fechas, anchoColumna);
   }
   let tipoInterno: TareaTipoInterna = tarea.tipo;
   if (tipoInterno === "tarea" && x2 - x1 < handleWidth * 2) {
@@ -173,7 +173,7 @@ const convertToBar = (
     rtl
   );
   const y = CoordenadaYTarea(index, altoFila, altoTarea);
-  const hideChildren = tarea.tipo === "proyecto" ? tarea.hideChildren : undefined;
+  const ocultarHijos = tarea.tipo === "proyecto" ? tarea.ocultarHijos : undefined;
 
   const styles = {
     backgroundColor: barBackgroundColor,
@@ -193,9 +193,9 @@ const convertToBar = (
     anchoProgreso,
     barCornerRadius,
     handleWidth,
-    hideChildren,
+    ocultarHijos,
     Alto: altoTarea,
-    barChildren: [],
+    barraHijos: [],
     styles,
   };
 };
@@ -203,17 +203,17 @@ const convertToBar = (
 const convertirAHito = (
   tarea: Tarea,
   index: number,
-  dates: Date[],
+  fechas: Date[],
   anchoColumna: number,
-  rowHeight: number,
+  altoFila: number,
   altoTarea: number,
   barCornerRadius: number,
   handleWidth: number,
   hitoBackgroundColor: string,
   hitoBackgroundSelectedColor: string
 ): BarraTareas => {
-  const x = CoordenadaXTarea(tarea.inicio, dates, anchoColumna);
-  const y = CoordenadaYTarea(index, rowHeight, altoTarea);
+  const x = CoordenadaXTarea(tarea.inicio, fechas, anchoColumna);
+  const y = CoordenadaYTarea(index, altoFila, altoTarea);
 
   const x1 = x - altoTarea * 0.5;
   const x2 = x + altoTarea * 0.5;
@@ -240,36 +240,36 @@ const convertirAHito = (
     tipoInterno: tarea.tipo,
     progreso: 0,
     Alto: rotatedHeight,
-    hideChildren: undefined,
-    barChildren: [],
+    ocultarHijos: undefined,
+    barraHijos: [],
     styles,
   };
 };
 
-const CoordenadaXTarea = (xDate: Date, dates: Date[], anchoColumna: number) => {
-  const index = dates.findIndex(d => d.getTime() >= xDate.getTime()) - 1;
+const CoordenadaXTarea = (xDate: Date, fechas: Date[], anchoColumna: number) => {
+  const index = fechas.findIndex(d => d.getTime() >= xDate.getTime()) - 1;
 
-  const remainderMillis = xDate.getTime() - dates[index].getTime();
+  const remainderMillis = xDate.getTime() - fechas[index].getTime();
   const percentOfInterval =
-    remainderMillis / (dates[index + 1].getTime() - dates[index].getTime());
+    remainderMillis / (fechas[index + 1].getTime() - fechas[index].getTime());
   const x = index * anchoColumna + percentOfInterval * anchoColumna;
   return x;
 };
 const CoordenadaXTareaRTL = (
   xDate: Date,
-  dates: Date[],
+  fechas: Date[],
   anchoColumna: number
 ) => {
-  let x = CoordenadaXTarea(xDate, dates, anchoColumna);
+  let x = CoordenadaXTarea(xDate, fechas, anchoColumna);
   x += anchoColumna;
   return x;
 };
 const CoordenadaYTarea = (
   index: number,
-  rowHeight: number,
+  altoFila: number,
   altoTarea: number
 ) => {
-  const y = index * rowHeight + (rowHeight - altoTarea) / 2;
+  const y = index * altoFila + (altoFila - altoTarea) / 2;
   return y;
 };
 

@@ -9,9 +9,9 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
   day: "numeric",
 };
 
-interface ListaTareasTableProps {
-  rowHeight: number;
-  rowWidth: string;
+interface TablaListaTareasProps {
+  altoFila: number;
+  anchoFila: string;
   fontFamily: string;
   fontSize: string;
   locale: string;
@@ -21,9 +21,9 @@ interface ListaTareasTableProps {
   onExpanderClick: (tarea: Tarea) => void;
 }
 
-export const ListaTareasTableDefault: React.FC<ListaTareasTableProps> = ({
-  rowHeight,
-  rowWidth,
+export const TablaListaTareasPredeterminada: React.FC<TablaListaTareasProps> = ({
+  altoFila,
+  anchoFila,
   tareas,
   fontFamily,
   fontSize,
@@ -44,14 +44,14 @@ export const ListaTareasTableDefault: React.FC<ListaTareasTableProps> = ({
         fontFamily: fontFamily,
         fontSize: fontSize,
         // Inyectamos las variables dinámicas una sola vez en el padre
-        ["--row-height" as any]: `${rowHeight}px`,
-        ["--row-width" as any]: rowWidth,
+        ["--row-height" as any]: `${altoFila}px`,
+        ["--row-width" as any]: anchoFila,
       }}
     >
       {tareas.map((t) => {
         // Determinamos el símbolo del expansor de forma limpia
         const expanderSymbol =
-          t.hideChildren === false ? "▼" : t.hideChildren === true ? "▶" : "";
+          t.ocultarHijos === false ? "▼" : t.ocultarHijos === true ? "▶" : "";
 
         // Comprobamos si la fila actual es la seleccionada
         const isSelected = t.id === tareaSeleccionadaId;
